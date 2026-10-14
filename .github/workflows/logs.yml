@@ -113,6 +113,20 @@ jobs:
           test -f logs/runtime/unicorn-ilil-dump.log
           test -f logs/runtime/hook-log.json
           test -f logs/runtime/static-ilil-decode.log
+          # Live runtime dump (Shizuku/KSU — no Frida)
+          test -f logs/runtime/live/jni-table-decrypted.log
+          test -f logs/runtime/live/shizuku-live-ilil.log
+          test -f logs/runtime/live/memscan-result.txt
+          test -f logs/runtime/live/ptrfind-result.txt
+          test -f logs/runtime/live/regionscan-result.txt
+          test -f logs/runtime/live/pagestrings-result.txt
+          test -f logs/runtime/live/memregion.bin.gz
+          test -f scripts/shizuku/MemScan.java
+          test -f scripts/shizuku/MemRegion.java
+          test -f scripts/shizuku/PageStrings.java
+          test -f scripts/shizuku/PtrFind.java
+          test -f scripts/shizuku/IlilDump.java
+          test -f scripts/shizuku_call_ilil.sh
           echo "All committed logs + scripts present."
           if find . -maxdepth 4 -name "*.apk" -print -quit | grep -q .; then
             echo "::error::APK found in repo — logs-only, must not commit APK."

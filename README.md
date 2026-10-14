@@ -61,3 +61,25 @@ For ground truth use Frida above; these two prove the same path without a device
 ## Workflow
 
 `.github/workflows/logs.yml` — `workflow_dispatch` — runs on `ubuntu-latest` with `binutils` + `python3` + `androguard`/`capstone`, re-reads the APK committed as a release asset (never committed as binary), regenerates `readelf -sida` / `objdump -d` / `capstone` / `androguard` logs, uploads them as `snake-engine-logs-<sha>` artifact. No APK is committed.
+
+## Live Runtime Dump (Shizuku/KSU root — still NO Frida)
+
+Device (Redmi, Android 17, KSU Next) + `android-shizuku-cli` (root, `u:r:ksu:s0`):
+
+```sh
+# 0) app running
+android-shizuku-cli exec "pidof com.snake"
+# 1) build the Java tools (r8 D8)
+javac -d out scripts/shizuku/*.java && java -cp r8.jar com.android.tools.r8.D8 --output out --min-api 28 out/*.class
+# 2) push chunked (base64) → /data/local/tmp/shizuku-ilil/*.dex
+# 3) run (root or app uid)
+CLASSPATH=/data/local/tmp/shizuku-ilil/memscan.dex app_process /system/bin --nice-name=snake-memscan MemScan $(pidof com.snake) 600
+CLASSPATH=/data/local/tmp/shizuku-ilil/memregion.dex app_process /system/bin --nice-name=snake-memregion MemRegion $(pidof com.snake) 7a3a659000 11911168 pjowqpxe
+```
+
+Result: `logs/runtime/live/jni-table-decrypted.log` — the pack's decrypted workspace
+(`0x7a3a659000`, 11.9 MB RWX) read live: **RegisterNatives name/signature table, anti-root paths,
+AES S-boxes (hex-stored), and the VirtualApp device-spoofing property table.**
+
+> `dd(1)` on `/proc/<pid>/mem` yields **zeros** for anonymous regions on Android 17 — the working read path is
+> Java `RandomAccessFile`. `memregion.bin.gz` (21 KB gz / 11.9 MB raw) is the whole decrypted region.

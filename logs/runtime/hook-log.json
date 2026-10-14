@@ -1,5 +1,5 @@
 {
-  "so": "/tmp/tmpsgt15pk_/lib/arm64-v8a/libengine.so",
+  "so": "/tmp/tmpdf55t7sv/lib/arm64-v8a/libengine.so",
   "jni_onload_offset": "0xf3fa0",
   "jni_size": 12388,
   "load_base": "0x0 (file_off = VA)",

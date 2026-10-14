@@ -1,5 +1,5 @@
 # Unicorn Hook-Log Runtime (No Frida, No Device) — Snake Engine libengine.so
-# SO: /tmp/tmpsgt15pk_/lib/arm64-v8a/libengine.so
+# SO: /tmp/tmpdf55t7sv/lib/arm64-v8a/libengine.so
 # JNI_OnLoad: 0xf3fa0 size 12388, load_base 0x0, q0 file head 010e084e4a010d8b294100910084e14e3f4115f1a1fdff543a3900904d1a90d2
 # Has unicorn: True, mapped heaps: 7
 # heap 0xb0000000 size 4096 nonzero 4094 head 00100014785620d478565ed4ffffffff78563416785620d478565ed4ffffffff78563416785620d4

@@ -1,0 +1,52 @@
+=== Snake Engine 2.2.6 — LIVE Java/DEX reflection via Shizuku+KSU (no Frida) ===
+Runner: CLASSPATH=<base.apk>:classes.dex app_process /system/bin --nice-name=snake-ilil IlilDump <base.apk>
+Identity: uid=0 (KSU) / app uid u0_a417 (10417), SELinux u:r:ksu:s0 → u:r:untrusted_app_34:s0:c161,c257,c512,c768
+APK: /data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk (31,456,198 B)
+Extracted: lib/arm64-v8a/libengine.so 8,544,568 B ; lib/arm64-v8a/libapp.so 5,637,024 B
+
+--- com.snake.helper.Native (live DEX) ---
+public static native void    ac(java.lang.Object, java.lang.Object)
+public static native void    aior(java.lang.String, java.lang.String)
+public static native void    awl(java.lang.String)
+public static native boolean chl(byte[])
+public static native byte[]  djp(int)
+public static native void    eio()
+public static native void    i(int)
+public static native void    ic(android.content.Context)
+public static native String  ilil(int)
+public static native void    pjowqpxe(java.lang.Object, java.lang.Object, java.lang.Object)
+public static native void    update(java.lang.Object, java.lang.reflect.Method)
+public static void  a(android.app.Activity, String, int, long, boolean)
+public static void  b(android.app.Activity, String, int, long, boolean)
+public static int   gcuid(int)
+public static android.content.pm.ApplicationInfo getApplicationInfo(android.content.Context, String)
+public static java.io.File il(java.io.File)
+public static java.lang.String il(java.lang.String)
+public static void  logIn(java.lang.String, long)
+public static void  logIn(java.lang.String, long, boolean)
+
+--- androidx.appcompat.view.menu.vx  (obfuscated com.snake OAuth bridge) ---
+public static void  a(String,long,boolean)
+public static void  b(String,long,boolean)         ← fragment/OAuth callback entry
+public static void  c(long,int,String,String,String,boolean)  ← 3 reflective targets (class/field/method)
+public static ClassLoader d()
+public static Activity    e()
+public static void  f(Activity,String,int,long,boolean)
+public static void  g(String,long)
+public static String h(String)
+
+--- ilil(int) invocation attempt ---
+java.lang.UnsatisfiedLinkError: No implementation found for java.lang.String com.snake.helper.Native.ilil(int)
+  (tried Java_com_snake_helper_Native_ilil and Java_com_snake_helper_Native_ilil__I)
+  - is the library loaded, e.g. System.loadLibrary?
+=> libengine.so registers natives dynamically (RegisterNatives). See logs/runtime/live/jni-table-decrypted.log §1
+   for the live-decrypted name/signature table (chl/djp/ac/awl/i/eio/aior/ic/ilil/pjowqpxe).
+
+--- System.load(libengine.so) out-of-context ---
+[extract] lib/arm64-v8a/libengine.so -> /data/local/tmp/shizuku-ilil/libengine.so 8544568
+[shizuku-ilil] System.load fail: java.lang.UnsatisfiedLinkError: Attempt to load writable file:
+    /data/user/0/com.snake/cache/shizuku-ilil/libengine.so
+# when loaded from /data/local/tmp (0644):
+#   AMD DEBUG tombstone: signal 11 (SEGV_MAPERR), fault addr 0x76b7648b90
+#   backtrace: #00 <unknown>   #01 pc 00000000001243bc  /data/local/tmp/shizuku-ilil/libengine.so
+#   esr: Instruction Abort Exception 0x20  → pack jumps into decrypted code that only exists in the real process

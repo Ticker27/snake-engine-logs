@@ -1,0 +1,11 @@
+FILE pid19019_7b61cca000_786432.bin size=786432 hits=7
+   +0xea70=7ab6b3c000
+   +0xeaa0=7ab6b3c000
+   +0xeab0=7ab6b3c000
+   +0x12588=7ab6b3c000
+   +0x12860=7ab6b30000
+   +0xa6fc8=7ab6b30000
+   +0xa6fd0=7ab6b3c000
+FILE pid19019_7c61c99000_786432.bin size=786432 hits=1
+   +0x2dd30=7ab6b3c000
+=== PtrFind DONE ===

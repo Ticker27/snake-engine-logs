@@ -1,0 +1,149 @@
+# Snake Engine 2.2.6 — LIVE Decrypted JNI Table (NO Frida)
+
+**Method:** live memory dump of the running `com.snake` process via Shizuku/KSU root (uid 0, `u:r:ksu:s0`).
+`dd(1)` from `/proc/<pid>/mem` returns **zeros** for anonymous regions on this device (Android 17 / `blazer`),
+so the read path used is **Java `RandomAccessFile("/proc/<pid>/mem","r")` + 64-bit `seek()`** (tools in `scripts/shizuku/`).
+
+- Device: `google/blazer_beta/blazer:17/CP21.260306.017` · kernel `5.15.194-android13` · KSU Next (root)
+- Target: `com.snake` v2.2.6 (`targetSdk 35`, arm64-v8a), pid `19019` (+ `:engine` 19136), uid `u0_a417`
+- Region: anonymous **RWX** `0x7a3a659000` size `0x0B5B000` = **11,911,168 bytes** — the pack's decrypted workspace
+- Scanned: **386 MB** of anon memory across 1208 regions in **46 s** (`MemScan.java`)
+
+> `dd if=/proc/PID/mem bs=4096 skip=... count=...` → all-zero output; `RandomAccessFile` read of the same
+> address → real content (15,635 non-zero bytes). This is why the shell-based scanner produced empty dumps.
+
+## 1) RegisterNatives table — decrypted (page-aligned by the packer)
+
+| Address | +offset | Item | Java method (from live DEX) |
+|---|---|---|---|
+| `0x7a3a65c000` | `+0x03000` | `([B)Z` | sig for `chl` |
+| `0x7a3a65d000` | `+0x04000` | **`chl`** | `Native.chl(byte[]) : boolean` |
+| `0x7a3a65e000` | `+0x05000` | `(I)[B` | sig for `djp` |
+| `0x7a3a65f000` | `+0x06000` | **`djp`** | `Native.djp(int) : byte[]` (license blob) |
+| `0x7a3a660000` | `+0x07000` | `(Ljava/lang/Object;Ljava/lang/Object;)V` | sig for `ac` |
+| `0x7a3a661000` | `+0x08000` | **`ac`** | `Native.ac(Object,Object)` |
+| `0x7a3a662000` | `+0x09000` | `(Ljava/lang/String;)V` | sig for `awl` |
+| `0x7a3a663000` | `+0x0a000` | **`awl`** | `Native.awl(String)` |
+| `0x7a3a664000` | `+0x0b000` | `(I)V` | sig for `i(int)` |
+| `0x7a3a666000` | `+0x0d000` | `()V` | sig for `eio()` |
+| `0x7a3a667000` | `+0x0e000` | **`eio`** | `Native.eio()` |
+| `0x7a3a669000` | `+0x10000` | `(Ljava/lang/String;Ljava/lang/String;)V` | sig for `aior` |
+| `0x7a3a66a000` | `+0x11000` | **`aior`** | `Native.aior(String,String)` |
+| `0x7a3a66b000` | `+0x12000` | `(Landroid/content/Context;)V` | sig for `ic` |
+| `0x7a3a66c000` | `+0x13000` | **`ic`** | `Native.ic(Context)` |
+| `0x7a3a66d000` | `+0x14000` | `(I)Ljava/lang/String;` | sig for `ilil` |
+| `0x7a3a66e000` | `+0x15000` | **`ilil`** | `Native.ilil(int) : String` ← **the encrypted string table accessor** |
+| `0x7a3a670000` | `+0x17000` | `(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V` | sig for `pjowqpxe` |
+| `0x7a3a671000` | `+0x18000` | **`pjowqpxe`** | `Native.pjowqpxe(Object,Object,Object)` |
+
+⇒ `RegisterNatives` table entries are now **resolved end-to-end**: Java declaration (live DEX reflection) ↔
+decrypted C-string (live memory) ↔ offsets in `libengine.so` (`logs/ghidra/libengine-*.log`).
+
+Separately (another allocation, RWX `0x7ab6b00000`…`0x7ab6b5c000`), the pack stores the reflection strings used
+by the Java-helper natives:
+
+| Address | String | Used by |
+|---|---|---|
+| `0x7ab6b2c000` | `ro.hardware` | device fingerprint |
+| `0x7ab6b30000` | `android_id` | `Native.gcuid(int)` → `Settings.Secure.ANDROID_ID` |
+| `0x7ab6b2d000` | `ro.product.model` | device fingerprint |
+| `0x7ab6b2e000` | `ro.product.manufacturer` | device fingerprint |
+| `0x7ab6b32000` | `()Landroid/content/ContentResolver;` | reflection sig |
+| `0x7ab6b33000` | `getContentResolver` | reflection method |
+| `0x7ab6b35000` | `(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;` | reflection sig |
+| `0x7ab6b36000` | `getString` | reflection method |
+| `0x7ab6b37000` | `android/provider/Settings$Secure` | reflection class |
+| `0x7ab6b39000` | `(Landroid/content/Context;Ljava/lang/String;)Landroid/content/pm/ApplicationInfo;` | reflection sig |
+| `0x7ab6b3a000` | `getApplicationInfo` | `Native.getApplicationInfo(Context,String)` |
+| `0x7ab6b3b000` / `0x7ab6b5c000` | `com/snake/helper/Native` | `FindClass` target |
+
+## 2) Anti-root / anti-tamper table (decrypted, same region)
+
+```
+0x7a3a672000  /product/bin/su          0x7a3a679000  /system/sd/xbin/su
+0x7a3a673000  /system/bin/.ext/.su     0x7a3a67a000  /system/app/Superuser.apk
+0x7a3a674000  /system/su               0x7a3a67b000  /vendor/bin/su
+0x7a3a675000  /data/local/su           0x7a3a67c000  /sbin/su
+0x7a3a676000  /data/local/bin/su       0x7a3a67d000  /system/xbin/su
+0x7a3a677000  /data/local/xbin/su      0x7a3a67e000  /system/bin/su
+0x7a3a678000  /system/bin/failsafe/su
+0x7a3a682000  dlsym                    (dynamic symbol resolution / hook detection)
+```
+
+## 3) Crypto material (decrypted, page-sized blobs)
+
+| Address | Blob |
+|---|---|
+| `0x7a3a67f000` | 512-byte hex string = **AES inverse S-box** (`52096ad5…4202135…`) — restored to 256 B at runtime |
+| `0x7a3a681000` | 512-byte hex string = **AES S-box** (`637C777B…54BB16`) — restored to 256 B at runtime |
+
+Both are stored as **ASCII hex** (not raw bytes) — the packer's own hex-decode step converts them.
+
+## 4) Device-spoofing property table (decrypted, same region)
+
+```
+0x7a3a684000  samsung/kylexx/kyleprods:5.1.1/LMY47V/S7562XXS1BQC1:user/release-keys   ← spoofed fingerprint
+0x7a3a685000  vendor.build.fingerprint     0x7a3a686000 10
+0x7a3a687000  vendor.sec.ril.radiostate    0x7a3a688000 8.8.4.4
+0x7a3a689000  dhcp.wlan0.dns2              0x7a3a68a000 8.8.8.8
+0x7a3a68b000  dhcp.wlan0.dns1              0x7a3a68c000 192.168.0.1
+0x7a3a68d000  dhcp.wlan0.gateway           0x7a3a68e000 192.168.0.101
+0x7a3a68f000  dhcp.wlan0.ipaddress         0x7a3a690000 ok
+0x7a3a691000  wlan.driver.status           0x7a3a692000 wlan0
+0x7a3a693000  wifi.interface              0x7a3a694000 EDGE
+0x7a3a695000  gsm.network.type            0x7a3a696000 READY
+0x7a3a697000  gsm.sim.state               0x7a3a698000 SKTelecom
+0x7a3a699000  gsm.sim.operator.alpha      0x7a3a69a000 45005
+0x7a3a69b000  gsm.sim.operator.numeric    0x7a3a69c000 45005
+0x7a3a69d000  gsm.operator.numeric        0x7a3a69e000 SKTelecom
+0x7a3a69f000  gsm.operator.alpha          0x7a3a6a0000 S7562ABC123
+0x7a3a6a1000  ril.serialnumber            0x7a3a6a2000 S7562XXS1BQC1
+0x7a3a6a3000  gsm.version.baseband        0x7a3a6a4000 8.8.4.4
+0x7a3a6a5000  net.dns2                    0x7a3a6a6000 8.8.8.8
+0x7a3a6a7000  net.dns1                    0x7a3a6a8000 stopped
+0x7a3a6a9000  init.svc.bootanim           0x7a3a6aa000 running
+0x7a3a6ab000  init.svc.adbd              0x7a3a6ac000 mtp,adb
+0x7a3a6ad000  sys.usb.config             0x7a3a6af000 sys.boot_completed
+0x7a3a6b0000  Asia/Seoul
+```
+
+(`key,value` pairs alternate by page — 0x1000 apart; the same table feeds `VirtualApp` guest spoofing.)
+
+## 5) Lifecycle / crash strings
+
+```
+0x7a3a659000  native        0x7a3a65a000  Crash:        0x7a3a65b000  tombstone
+```
+
+## 6) Runtime HTTP/JNI evidence (other regions)
+
+| Region | Content |
+|---|---|
+| `0x7900000000` (7.3 MB, Dart isolate heap) | `https://rest.snakeseller.com/api/request/` + `route`, `SecurityContext_Allocate`, `Padam` |
+| `0x7900a00000` (2 MB) | `https://rest.snakeseller.com/api/files/2.jpg?r=4…`, `…/api/files/3.jpg?r=44` |
+| `0x7c61c99000` (scudo) | `https://rest.snakeseller.com/api/files/…` |
+| `0x7900000000` (Dart UI strings) | `Your secure access token. Keep it safe…`, `decompressLicenses`, `flutter/keydata`, `Add Device`, `Entry Key`, `Token Akses`, `Token berjaya disalin`, `Iyong mga Key`, `No token available`, `This device is already added`, `Subscription converted` |
+| `0x7b61cca000` (scudo) | pointers into the JNI string pool (`0x7ab6b30000`, `0x7ab6b3c000`) — the `JNINativeMethod[]` neighbourhood |
+| `0x7a28995000` | in-memory ANR trace: `at com.snake.App.onCreate(unavailable:7)`, native `#01 pc 006b061c …/base.apk (offset a0a000)` |
+
+## 7) Negative result / anti-analysis note
+
+Loading `libengine.so` out-of-context (extracted copy, `app_process` as uid 0/app uid) **fails**:
+
+- `System.load()` → `UnsatisfiedLinkError: Attempt to load writable file` (writable-dir guard), and when loaded
+  from `/data/local/tmp` the process **SIGSEGV**s inside the library: tombstone
+  `#01 pc 00000000001243bc /data/local/tmp/…/libengine.so` → `#00 pc 0x76b7648b90 <unknown>` (jump to unmapped).
+  i.e. the pack expects its real host context; the decrypted-code jump target only exists in the real process.
+- `ilil/djp/...` then report `No implementation found … is the library loaded?` — they are **dynamically
+  registered** (`RegisterNatives`), never `Java_com_snake_helper_Native_*` symbols. Confirms §1.
+
+## 8) Tooling (no Frida anywhere)
+
+| Tool | Purpose |
+|---|---|
+| `scripts/shizuku/MemScan.java` | scan `/proc/PID/mem` of a live process for patterns, dump hit regions |
+| `scripts/shizuku/MemRegion.java` | full region dump (64-bit seek) + needle context + hexdump |
+| `scripts/shizuku/PageStrings.java` | per-page string extraction of a dump (no `strings(1)` needed) |
+| `scripts/shizuku/PtrFind.java` | find 64-bit pointers into a target address range (JNINativeMethod chase) |
+| `scripts/shizuku/IlilDump.java` | live DEX reflection: enumerate `Native`/`vx` methods, invoke natives |
+| `scripts/shizuku_call_ilil.sh` | end-to-end runner (compile → chunked push → run as app uid) |

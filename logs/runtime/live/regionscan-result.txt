@@ -1,0 +1,36 @@
+=== MemRegion pid=19019 start=0x7a3a659000 size=11911168 nonzero=15635 ===
+needle at +0x18000 (abs 0x7a3a671000)
+needle 'pjowqpxe' total hits=1
+--- strings around +(0x18000) ---
+  +0x18000: pjowqpxe
+--- region strings (JNI-ish, max 400) ---
+  +0x7000: (Ljava/lang/Object;Ljava/lang/Object;)V
+  +0x9000: (Ljava/lang/String;)V
+  +0x10000: (Ljava/lang/String;Ljava/lang/String;)V
+  +0x12000: (Landroid/content/Context;)V
+  +0x14000: (I)Ljava/lang/String;
+  +0x15000: ilil
+  +0x17000: (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V
+  +0x80000: ro.product.manufacturer
+  +0x82000: ro.product.device
+  +0x84000: ro.product.name
+  +0x86000: ro.product.model
+  +0x88000: ro.product.brand
+  +0x122000: /data/data/com.snake/files/
+  +0x1bc000: /data/data/com.snake/files/
+  +0x256000: /data/data/com.snake/files/
+  +0x2f0000: /data/data/com.snake/files/
+  +0x38a000: /data/data/com.snake/files/
+  +0x424000: /data/data/com.snake/files/
+  +0x4be000: /data/data/com.snake/files/
+  +0x558000: /data/data/com.snake/files/
+  +0x5f2000: /data/data/com.snake/files/
+  +0x68c000: /data/data/com.snake/files/
+  +0x726000: /data/data/com.snake/files/
+  +0x7c0000: /data/data/com.snake/files/
+  +0x85a000: /data/data/com.snake/files/
+  +0x8f4000: /data/data/com.snake/files/
+  +0x98e000: /data/data/com.snake/files/
+  +0xa28000: /data/data/com.snake/files/
+  +0xac2000: /data/data/com.snake/files/
+=== MemRegion DONE ===
