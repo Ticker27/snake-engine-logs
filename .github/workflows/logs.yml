@@ -135,6 +135,9 @@ jobs:
           test -f logs/runtime/live/smallscan2-result.txt
           test -f scripts/shizuku/KeyScan.java
           test -f scripts/shizuku/SmallScan.java
+          test -f logs/runtime/live/c2-and-sandbox-targets.log
+          test -f logs/runtime/live/c2-assets/snakeengine_banner_8ballpool_1536x861.jpg
+          test -f scripts/shizuku/CtxScan.java
           echo "All committed logs + scripts present."
           if find . -maxdepth 4 -name "*.apk" -print -quit | grep -q .; then
             echo "::error::APK found in repo — logs-only, must not commit APK."

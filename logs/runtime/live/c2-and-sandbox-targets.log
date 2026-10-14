@@ -1,0 +1,94 @@
+# Snake Engine 2.2.6 — C2 call points & sandbox targets (live, Android 17 / Redmi, root via Shizuku)
+
+Scope: where the app *calls home*, and what gets **loaded & executed** inside the
+VirtualApp sandbox root `/data/user/0/com.snake/root/`.
+
+## 1) C2 endpoints (live-verified)
+
+| endpoint | role | evidence |
+|---|---|---|
+| `https://rest.snakeseller.com/api/request/` | **main C2 API** (license / device / key / target list) | string in `libapp.so` `0x44001` + live Dart heap |
+| `https://rest.snakeseller.com/api/files/<id>.jpg?r=4` | **target assets** (game art / banners) | live Dart heap; cached to `files/<sha256>` |
+| `https://storage.googleapis.com/reporst/` | **payload bucket** (target media / packages) | live process memory (`snakeseller` + `reporst` in the same Dart object graph) |
+| `https://snakeengine.com/topup/` + `https:///www.snakeengine.com` | payment / web UI opened by `InternalWebBrowser` | Dart heap + `Entry.C("E")` |
+| `https://firebaseinstallations.googleapis.com` | Firebase install-id (GA/FCM telemetry) | DEX `0x343e4c`; live socket to `142.250.204.155:443` |
+| `https://apkpure.com/search?q=` / `play.google.com/store/apps/details?id=` | “find the game to clone” lookup | Dart heap |
+| `imgur.com`, `flagsapi.com`, `discord.com`, `t.me`, `wa.me`, `facebook.com` | support / community / flags | Dart heap |
+
+Hosts resolved at scan time: `rest.snakeseller.com` **=** `snakeengine.com` **=** `92.205.103.45`.
+
+### Live TCP peers of `com.snake` (pid 5719)
+
+```
+ESTAB  192.168.0.101:42150 -> 142.250.204.155:443   (Google / Firebase Installations)
+ESTAB  192.168.0.101:42154 -> 142.250.204.155:443   (Google / Firebase Installations)
+CLOSE-WAIT 192.168.0.101:46080 -> 173.249.21.21:55683  ** non-standard port **
+```
+
+* `173.249.21.21` → PTR `m10021.contaboserver.net` (Contabo, DE) — **port 55683 is not 80/443**;
+  this is the only non-TLS, non-443 peer held by the app ⇒ treated as the *engine/command channel*
+  (worth watching; not present in the static string set, i.e. resolved at runtime).
+* Raw `/proc/<pid>/net/tcp` rows also show `8289F057:01BB` (87.240.137.130:443) and
+  `1515F9AD:D983` (=173.249.21.21:55683) — same session.
+
+## 2) Sandbox: `/data/user/0/com.snake/root/`
+
+```
+root/
+├── cache/      (empty)
+├── data/
+│   └── app/    (empty)   <-- target packages (cloned apps) are unpacked here
+└── system/     (empty)
+```
+
+* This is the **VirtualApp “root” layout**, i.e. a mirror of `/{cache,data,system}` for the guest:
+  * `root/data/app/<pkg>/base.apk` — decompressed target APK (loaded by `PathClassLoader`)
+  * `root/data/data/<pkg>/…` — guest app private data
+* **Currently empty** ⇒ no target has been installed/launched on this device yet; the sandbox was
+  created `2026-10-11 00:42` (first run) and has not been populated since.
+* Trigger chain that would populate it (from `logs/dex/full/entry-C-dispatcher.log`):
+  `Dart (C2 response) → MethodChannel Entry.C(“H”) → s2.a() / yu0.h().A(pkg,uid)` → VirtualCore install
+  → `ProxyActivity P0..P3` in `:p0..:p3` → target runs inside the sandbox.
+
+## 3) Targets that the C2 already pushed to the device
+
+`/data/user/0/com.snake/files/` = **41 files, all SHA-256-named images** (content-addressed cache),
+downloaded from `/api/files/<id>.jpg` — these are the **games/engines offered by the C2**:
+
+| kind | count | dimensions observed |
+|---|---|---|
+| game icons | 22 | 64×64 PNG (RGBA) |
+| game thumbs | 15 | 128×128 JPEG |
+| game art | 4 | 512×512 PNG/JPEG |
+| promo banners | 3 | 1536×861 / 1536×860 JPEG |
+
+Verified content (pulled to `logs/runtime/live/c2-assets/`):
+
+* `snakeengine_banner_8ballpool_1536x861.jpg` — **“SNAKE ENGINE — 8 BALL POOL”** promo banner
+  (snake logo, purple “ENGINE”, billiard balls) → the C2 ships per-game promo art.
+* `target_thumb_512x512.png` — soccer game art (Brazil × Argentina flags, goal) → football title support.
+
+⇒ the “target list” is a catalogue of mobile games (8 Ball Pool, football titles, …) whose assets are
+already cached on the device; each entry carries image ids, localized captions (`ar`, `es`, `tl`, `id`, `ms`),
+the store link (`apkpure` / Play) and the engine/package payload URL (bucket `reporst`).
+
+## 4) Where the C2 data lands on disk
+
+```
+shared_prefs/com.snake.xml          -> cip_pub (empty)
+files/<sha256>                      -> 41 C2 images (see §3)
+databases/com.google.android.datatransport.events, google_app_measurement_local.db
+                                     -> Firebase/GA event queues only (no app C2 tables)
+root/{cache,data/system}            -> VirtualApp sandbox (empty, see §2)
+```
+
+## 5) Call-point summary (static ↔ live)
+
+| layer | call point | notes |
+|---|---|---|
+| Dart | `HttpClient` → `rest.snakeseller.com/api/request/` | `libapp.so 0x44001`; proxy-aware (`http_proxy`/`NO_PROXY`) |
+| Dart → Java | `MethodChannel Entry.C` codes `0/A/B/C/D/E/F/G/H` | `logs/dex/full/entry-C-dispatcher.log` |
+| Java → native | `Native.ilil/djp/chl/...` (RegisterNatives) | `logs/runtime/live/jni-table-decrypted.log` |
+| install/run | `s2.a()` / `yu0.h().A(pkg,uid)` → VirtualCore | `Entry.C(“G”/“H”)` |
+| billing | `InternalWebBrowser` → `snakeengine.com/topup` | exported activity `VIEW http(s)` |
+| non-443 peer | `173.249.21.21:55683` | live socket, runtime-resolved |
