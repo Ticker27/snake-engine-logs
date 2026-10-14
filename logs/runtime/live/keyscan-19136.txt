@@ -1,0 +1,58 @@
+=== KeyScan pid=19136 patterns=6 ===
+  pattern f11301 width=4
+  pattern f11501 width=4
+  pattern f21501 width=4
+  pattern f31501 width=4
+  pattern f11520 width=4
+  pattern f11521 width=4
+HIT pat=f11301 w4 at 0x7a3c8d3bfa region=[0x7a3c790000..0x7a3e590000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 28 02 07 20 1a 01 1e 02 6e 20 c7 84 10 00 0c 00 21 01 12 03 01 34 35 14 30 00 46 05 00 04 13 06 3d 00 6e 20 b6 84 65 00 0a 06 3d 06 23 00 14 07 01 13 f1 00 71 10 23 80 07 00 0c 07 6e 30 cc 84 35 06 0c 08 71 10 21 07 08 00 0c 08 6e 20 ae 84 87 00 0a 07 38 07 0e 00 d8 06 06 01 6e 20 cb 84 
+    asc: (.. ....n ......!....45.0.F.....=.n ..e...=.#.......q.#.....n0..5...q.!.....n ......8.......n ..
+HIT pat=f11501 w4 at 0x7a3c8d3cf0 region=[0x7a3c790000..0x7a3e590000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 21 00 00 00 65 00 01 00 01 00 12 00 10 00 07 00 04 00 04 00 00 00 00 00 8d 00 00 00 1c 00 df 17 71 00 35 5e 00 00 0c 01 39 01 03 00 0e 00 14 02 01 15 f1 00 71 10 23 80 02 00 0c 02 12 13 71 30 dd 83 32 01 0c 01 14 02 01 15 f2 00 71 10 23 80 02 00 0c 02 6e 20 e5 83 21 00 0c 02 6e 20 36 85 
+    asc: !...e...........................q.5^....9...........q.#.......q0..2.........q.#.....n ..!...n 6.
+HIT pat=f21501 w4 at 0x7a3c8d3d08 region=[0x7a3c790000..0x7a3e590000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 8d 00 00 00 1c 00 df 17 71 00 35 5e 00 00 0c 01 39 01 03 00 0e 00 14 02 01 15 f1 00 71 10 23 80 02 00 0c 02 12 13 71 30 dd 83 32 01 0c 01 14 02 01 15 f2 00 71 10 23 80 02 00 0c 02 6e 20 e5 83 21 00 0c 02 6e 20 36 85 32 00 12 04 6e 40 4b 85 42 a9 1a 09 5d 40 6e 20 e5 83 91 00 0c 09 6e 20 
+    asc: ........q.5^....9...........q.#.......q0..2.........q.#.....n ..!...n 6.2...n@K.B...]@n ......n 
+HIT pat=f31501 w4 at 0x7a3c8d3d44 region=[0x7a3c790000..0x7a3e590000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 6e 20 e5 83 21 00 0c 02 6e 20 36 85 32 00 12 04 6e 40 4b 85 42 a9 1a 09 5d 40 6e 20 e5 83 91 00 0c 09 6e 20 36 85 39 00 6e 30 49 85 49 0f 14 09 01 15 f3 00 12 3a 12 2f 12 02 71 10 23 80 09 00 0c 05 12 46 23 67 be 19 62 08 96 36 4d 08 07 02 4d 00 07 03 4d 00 07 0f 4d 00 07 0a 6e 30 e7 83 
+    asc: n ..!...n 6.2...n@K.B...]@n ......n 6.9.n0I.I........:./..q.#......F#g..b..6M...M...M...M...n0..
+HIT pat=f11520 w4 at 0x7a3c8d3e3a region=[0x7a3c790000..0x7a3e590000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 00 00 29 00 0a 00 63 00 00 00 29 00 01 00 03 00 8c 01 7f cf 2f 33 8c 01 7f d1 2f 63 8c 01 0d 00 06 00 06 00 00 00 00 00 00 00 4a 00 00 00 14 08 20 15 f1 00 71 10 23 80 08 00 0c 08 14 00 21 15 f1 00 71 10 23 80 00 00 0c 00 71 20 aa 67 08 00 6e 10 a9 02 07 00 0c 07 12 18 23 88 c7 18 22 00 
+    asc: ..)...c...)........./3..../c..............J..... ...q.#.......!...q.#.....q .g..n.........#...".
+HIT pat=f11521 w4 at 0x7a3c8d3e48 region=[0x7a3c790000..0x7a3e590000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 03 00 8c 01 7f cf 2f 33 8c 01 7f d1 2f 63 8c 01 0d 00 06 00 06 00 00 00 00 00 00 00 4a 00 00 00 14 08 20 15 f1 00 71 10 23 80 08 00 0c 08 14 00 21 15 f1 00 71 10 23 80 00 00 0c 00 71 20 aa 67 08 00 6e 10 a9 02 07 00 0c 07 12 18 23 88 c7 18 22 00 09 12 07 01 07 72 07 83 04 a4 01 c6 76 06 
+    asc: ....../3..../c..............J..... ...q.#.......!...q.#.....q .g..n.........#..."......r......v.
+HIT pat=f11301 w4 at 0x7aa4507583 region=[0x7aa43d8000..0x7aa4e4b000) perm=r--p path=/system_ext/framework/miui-framework.hyperviewscale.jar
+    hex: 00 52 ef 00 00 a1 0f 89 00 52 ef 00 00 a1 0f 3d 01 52 ef 00 00 a1 0f a7 03 52 ef 00 00 a1 0f 3a 00 13 f1 00 00 a1 0f 89 00 13 f1 00 00 a1 0f 3d 01 13 f1 00 00 a1 0f a7 03 13 f1 00 00 a1 0f 3a 00 ef 01 01 00 a1 0f 88 00 ef 01 01 00 a1 0f 39 00 48 02 01 00 a1 0f 87 00 48 02 01 00 a1 0f 3a 
+    asc: .R.......R.....=.R.......R.....:...............=...............:...............9.H.......H.....:
+HIT pat=f11301 w4 at 0x7aa4518223 region=[0x7aa43d8000..0x7aa4e4b000) perm=r--p path=/system_ext/framework/miui-framework.hyperviewscale.jar
+    hex: 00 52 ef 00 00 e4 12 89 00 52 ef 00 00 e4 12 3d 01 52 ef 00 00 e4 12 a7 03 52 ef 00 00 e4 12 3a 00 13 f1 00 00 e4 12 89 00 13 f1 00 00 e4 12 3d 01 13 f1 00 00 e4 12 a7 03 13 f1 00 00 e4 12 39 00 02 02 01 00 e4 12 87 00 02 02 01 00 e4 12 3a 00 3c 02 01 00 e4 12 89 00 3c 02 01 00 e4 12 39 
+    asc: .R.......R.....=.R.......R.....:...............=...............9...............:.<.......<.....9
+HIT pat=f11301 w4 at 0x7aab2f2bfa region=[0x7aab1af000..0x7aab564000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 28 02 07 20 1a 01 1e 02 6e 20 c7 84 10 00 0c 00 21 01 12 03 01 34 35 14 30 00 46 05 00 04 13 06 3d 00 6e 20 b6 84 65 00 0a 06 3d 06 23 00 14 07 01 13 f1 00 71 10 23 80 07 00 0c 07 6e 30 cc 84 35 06 0c 08 71 10 21 07 08 00 0c 08 6e 20 ae 84 87 00 0a 07 38 07 0e 00 d8 06 06 01 6e 20 cb 84 
+    asc: (.. ....n ......!....45.0.F.....=.n ..e...=.#.......q.#.....n0..5...q.!.....n ......8.......n ..
+HIT pat=f11501 w4 at 0x7aab2f2cf0 region=[0x7aab1af000..0x7aab564000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 21 00 00 00 65 00 01 00 01 00 12 00 10 00 07 00 04 00 04 00 00 00 00 00 8d 00 00 00 1c 00 df 17 71 00 35 5e 00 00 0c 01 39 01 03 00 0e 00 14 02 01 15 f1 00 71 10 23 80 02 00 0c 02 12 13 71 30 dd 83 32 01 0c 01 14 02 01 15 f2 00 71 10 23 80 02 00 0c 02 6e 20 e5 83 21 00 0c 02 6e 20 36 85 
+    asc: !...e...........................q.5^....9...........q.#.......q0..2.........q.#.....n ..!...n 6.
+HIT pat=f21501 w4 at 0x7aab2f2d08 region=[0x7aab1af000..0x7aab564000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 8d 00 00 00 1c 00 df 17 71 00 35 5e 00 00 0c 01 39 01 03 00 0e 00 14 02 01 15 f1 00 71 10 23 80 02 00 0c 02 12 13 71 30 dd 83 32 01 0c 01 14 02 01 15 f2 00 71 10 23 80 02 00 0c 02 6e 20 e5 83 21 00 0c 02 6e 20 36 85 32 00 12 04 6e 40 4b 85 42 a9 1a 09 5d 40 6e 20 e5 83 91 00 0c 09 6e 20 
+    asc: ........q.5^....9...........q.#.......q0..2.........q.#.....n ..!...n 6.2...n@K.B...]@n ......n 
+HIT pat=f31501 w4 at 0x7aab2f2d44 region=[0x7aab1af000..0x7aab564000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 6e 20 e5 83 21 00 0c 02 6e 20 36 85 32 00 12 04 6e 40 4b 85 42 a9 1a 09 5d 40 6e 20 e5 83 91 00 0c 09 6e 20 36 85 39 00 6e 30 49 85 49 0f 14 09 01 15 f3 00 12 3a 12 2f 12 02 71 10 23 80 09 00 0c 05 12 46 23 67 be 19 62 08 96 36 4d 08 07 02 4d 00 07 03 4d 00 07 0f 4d 00 07 0a 6e 30 e7 83 
+    asc: n ..!...n 6.2...n@K.B...]@n ......n 6.9.n0I.I........:./..q.#......F#g..b..6M...M...M...M...n0..
+HIT pat=f11520 w4 at 0x7aab2f2e3a region=[0x7aab1af000..0x7aab564000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 00 00 29 00 0a 00 63 00 00 00 29 00 01 00 03 00 8c 01 7f cf 2f 33 8c 01 7f d1 2f 63 8c 01 0d 00 06 00 06 00 00 00 00 00 00 00 4a 00 00 00 14 08 20 15 f1 00 71 10 23 80 08 00 0c 08 14 00 21 15 f1 00 71 10 23 80 00 00 0c 00 71 20 aa 67 08 00 6e 10 a9 02 07 00 0c 07 12 18 23 88 c7 18 22 00 
+    asc: ..)...c...)........./3..../c..............J..... ...q.#.......!...q.#.....q .g..n.........#...".
+HIT pat=f11521 w4 at 0x7aab2f2e48 region=[0x7aab1af000..0x7aab564000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 03 00 8c 01 7f cf 2f 33 8c 01 7f d1 2f 63 8c 01 0d 00 06 00 06 00 00 00 00 00 00 00 4a 00 00 00 14 08 20 15 f1 00 71 10 23 80 08 00 0c 08 14 00 21 15 f1 00 71 10 23 80 00 00 0c 00 71 20 aa 67 08 00 6e 10 a9 02 07 00 0c 07 12 18 23 88 c7 18 22 00 09 12 07 01 07 72 07 83 04 a4 01 c6 76 06 
+    asc: ....../3..../c..............J..... ...q.#.......!...q.#.....q .g..n.........#..."......r......v.
+F#g..b..6M...M...M...M...n0..
+HIT pat=f11520 w4 at 0x7aab2f2e3a region=[0x7aab1af000..0x7aab564000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 00 00 29 00 0a 00 63 00 00 00 29 00 01 00 03 00 8c 01 7f cf 2f 33 8c 01 7f d1 2f 63 8c 01 0d 00 06 00 06 00 00 00 00 00 00 00 4a 00 00 00 14 08 20 15 f1 00 71 10 23 80 08 00 0c 08 14 00 21 15 f1 00 71 10 23 80 00 00 0c 00 71 20 aa 67 08 00 6e 10 a9 02 07 00 0c 07 12 18 23 88 c7 18 22 00 
+    asc: ..)...c...)........./3..../c..............J..... ...q.#.......!...q.#.....q .g..n.........#...".
+HIT pat=f11521 w4 at 0x7aab2f2e48 region=[0x7aab1af000..0x7aab564000) perm=r--p path=/data/app/~~a0wmsQ5noq8Ui7wejPnOCg==/com.snake-3MlU-xL0AJCdJaYulx3x9Q==/base.apk
+    hex: 03 00 8c 01 7f cf 2f 33 8c 01 7f d1 2f 63 8c 01 0d 00 06 00 06 00 00 00 00 00 00 00 4a 00 00 00 14 08 20 15 f1 00 71 10 23 80 08 00 0c 08 14 00 21 15 f1 00 71 10 23 80 00 00 0c 00 71 20 aa 67 08 00 6e 10 a9 02 07 00 0c 07 12 18 23 88 c7 18 22 00 09 12 07 01 07 72 07 83 04 a4 01 c6 76 06 
+    asc: ....../3..../c..............J..... ...q.#.......!...q.#.....q .g..n.........#..."......r......v.
+regions=3442 scanned=1126723584 hits=16
+=== KeyScan DONE ===

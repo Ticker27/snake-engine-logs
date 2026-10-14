@@ -1,0 +1,48 @@
+# Snake Engine 2.2.6 — Extraction Coverage Audit
+
+Source: `lib/arm64-v8a/libengine.so` (8,544,568 B) inside `base.apk` (Android 17 device, live process check included).
+
+| section | size (B) | extracted? |
+|---|---|---|
+| `.note.android.ident` | 152 | readelf only (headers/symbols logged) |
+| `.note.gnu.build-id` | 36 | readelf only (headers/symbols logged) |
+| `.dynsym` | 3,696 | readelf only (headers/symbols logged) |
+| `.gnu.version` | 308 | readelf only (headers/symbols logged) |
+| `.gnu.version_r` | 64 | readelf only (headers/symbols logged) |
+| `.gnu.hash` | 132 | readelf only (headers/symbols logged) |
+| `.dynstr` | 2,803 | readelf only (headers/symbols logged) |
+| `.rela.dyn` | 57,168 | readelf only (headers/symbols logged) |
+| `.rela.plt` | 3,240 | readelf only (headers/symbols logged) |
+| `.rodata` | 208,228 | PARTIAL — 208,228 B; ~500 encrypted blobs @0x2A808-0x3FC10 (keys + data) enumerated, plaintext NOT recovered; string samples logged |
+| `.gcc_except_table` | 14,328 | readelf only (headers/symbols logged) |
+| `.eh_frame_hdr` | 8,412 | readelf only (headers/symbols logged) |
+| `.eh_frame` | 37,060 | readelf only (headers/symbols logged) |
+| `.text` | 8,179,036 | PARTIAL 21,328 B / 8,179,036 B (0.26%) — JNI_OnLoad 0xF3FA0 (12,388) + B01C4 (4,480) + B134C (4,460) disassembled; code is PLAINTEXT (verified byte-identical with APK mapping in live process) ⇒ remaining 99.74% can be disassembled statically |
+| `.mytext` | 244 | FULL (60 lines capstone; packer stub) |
+| `.plt` | 2,192 | readelf only (headers/symbols logged) |
+| `.data.rel.ro` | 21,560 | NOT ANALYSED (21,560 B, entropy 0.25 = mostly zero/padding) |
+| `.fini_array` | 16 | readelf only (headers/symbols logged) |
+| `.init_array` | 352 | readelf only (headers/symbols logged) |
+| `.dynamic` | 432 | readelf only (headers/symbols logged) |
+| `.got` | 1,136 | readelf only (headers/symbols logged) |
+| `.got.plt` | 1,104 | readelf only (headers/symbols logged) |
+| `.data` | 112 | readelf only (headers/symbols logged) |
+| `.bss` | 76,728 | RUNTIME ONLY (76,728 B) — live cache slots read: +0xBF8 (syscall trampoline ptr), +0xD10/+0xA10 (decoder singleton objects) |
+| `.comment` | 177 | readelf only (headers/symbols logged) |
+| `.shstrtab` | 268 | readelf only (headers/symbols logged) |
+
+**Total sections: 8,618,984 B**
+
+## Not yet extracted (priority order)
+
+1. **`.text` 8,158,708 B (99.74%)** — plaintext ARM64; full `objdump -d`/capstone pass outstanding (safe to run in CI).
+2. **~500 encrypted string blobs in `.rodata` (`0x2A808`–`0x3FC10`)** — 8-byte key `f4b4b760db1a2630` + data; cipher is *stateful* (per-byte decoder object, 12-byte state = key + counter); plaintext NOT recovered yet.
+3. **`.data.rel.ro` / `.rela.dyn` / `.eh_frame` / `.init_array`** — never analysed.
+4. **libapp.so (Dart AOT)** — only string pool extracted; snapshot/kernel not parsed.
+5. **libflutter.so** — symbols only.
+6. **Packer runtime** — ELF reader / symbol override / injection engine identified by live strings, not disassembled.
+
+## Verified NOT encrypted
+File-backed `r-xp` mapping of `libengine.so` in the live process is **byte-identical to the APK**
+(`0x7a3efdb000` vs APK+0x916000+0xF4000 .. `+0x500000`: 100% of 65,536 B compared, identical).
+⇒ the packer hides *data/strings*, not code; the earlier `entropy 6.953` figure is normal ARM64 code entropy.

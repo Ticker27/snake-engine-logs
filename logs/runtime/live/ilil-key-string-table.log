@@ -1,0 +1,83 @@
+# Snake Engine 2.2.6 — `ilil(int)` key→string table: mechanism & live evidence (NO Frida)
+
+## 1) It is NOT a table in memory — it is 6 code branches
+
+`JNI_OnLoad @ 0xF3FA0` (plaintext code) contains the dispatcher:
+
+```
+0f11b4: mov w9,#0x1520 ; movk w9,#0xf1,lsl#16 ; cmp w2,w9 ; b.gt 0xf1778
+0f11c8: mov w8,#0x1301 ; movk w8,#0xf1,lsl#16 ; cmp w2,w8 ; b.eq 0xf1d30   <- 0xF11301
+0f11d8: mov w8,#0x1501 ; movk w8,#0xf1,lsl#16 ; cmp w2,w8 ; b.eq 0xf2854   <- 0xF11501
+0f11f0: mov w8,#0x1520 ; movk w8,#0xf1,lsl#16 ; cmp w2,w8 ; b.ne 0xf2840   <- 0xF11520
+0f1778: mov w8,#0x1521 ; movk w8,#0xf1,lsl#16 ; cmp w2,w8 ; b.eq 0xf22b8   <- 0xF11521
+0f1788: mov w8,#0x1501 ; movk w8,#0xf2,lsl#16 ; cmp w2,w8 ; b.eq 0xf2ddc   <- 0xF21501
+0f1798: mov w8,#0x1501 ; movk w8,#0xf3,lsl#16 ; cmp w2,w8 ; b.eq 0xf1ca0   <- 0xF31501
+0f17a4: ... else -> 0xf2840 (return null/-1)
+```
+
+## 2) Two different decrypt paths
+
+### A. `0xF11520` and `0xF31501` — blob decrypt from `.rodata`
+```
+0f16f0: mmap(NULL, 0x49, RWX, PRIVATE|ANON, -1, 0) via blr x19     <- x19 = JIT syscall trampoline
+0f1710: memcpy(page, .rodata 0x2E4F0, 0x49)                        <- blob (73 B)
+0f1724: x21 = 0x7A2710()  /  0x777EC0()   <- lazy-init singletons (.bss 0x836D10 / 0x836A10)
+0f1734: x8 = 0x30261ADB60B7B4F4                                     <- 12-byte state: key(8) + ctr(4)=0
+0f1754: loop 0x48 (72) bytes:  page[i] = decode(page[i], state)     <- via object method
+```
+```
+key 0xF31501 -> 0xF1CA0: same but mmap(0xe), blob = .rodata 0x2E600 (14 B), loop 0xd (13 bytes)
+```
+* `.rodata` blob table: **496 entries**, 8-byte key `f4b4b760db1a2630` + 8 B padding + data,
+  offsets `0x2A808` … `0x3FC10` (dense until `0x2F7D8`, then every `0x730` = 1,840 B).
+* The decoder is a C++ object; `__cxa_guard`-style flag at `.bss+0xD20` / `+0xA20`, object at `+0xD10` / `+0xA10`.
+* Cipher is **stateful** — verified negative against: XOR/add/sub with rotating key, AES-CTR (S-box
+  implementations), LCG keystreams, S-box composition, position-keystream statistics over all 496 entries.
+  ⇒ requires emulation (Unicorn on `0x776980`/decoder) or a live call.
+
+### B. `0xF11301`, `0xF11501`, `0xF11521`, `0xF21501` — JIT-generated per-key routine
+```
+mmap(NULL, 0xc, RWX, ...)                       <- 12-byte result buffer, cached at .bss+0xBF8
+sysconf(_SC_PAGESIZE) -> page-size sized words  <- builds an executable stub
+rand() -> OR with 0x14000000 / key-derived constants, patched with `bfxil` branch offsets
+__clear_cache(page, page+n)
+```
+Live dump of the generated stub (from the running process):
+```
+7d8d0c4000: mov x8, x6
+7d8d0c4004: svc #0
+7d8d0c4008: ret          <- 10 non-zero bytes; the rest is `udf #0` padding
+```
+⇒ the "JIT" is a **syscall trampoline generator** (hides the `svc` from static hooks); the real
+decryption is done by the same C++ decoder object as in path A.
+
+## 3) Live state captured (pid 28696 → com.snake)
+
+| VA | what |
+|---|---|
+| `libengine base 0x7a3f884000` (from `base.apk` map @ file off `0x916000`) | ELF base |
+| `.bss+0xBF8` = `0x7d8d0c4000` | generated syscall trampoline (dumped, see above) |
+| `.bss+0xA10` = `0x7d8cc5e000`, `0x7d8cc62000` | decoder object fields |
+| `.bss+0xD10` = `0x7a3a277000` | second decoder singleton |
+| `0x7ab6b5c000` | `com/snake/helper/Native` string (JNI pool) |
+| `0x7a3a572000` (2.4 MB RWX) | packer workspace (mostly reserved; strings only) |
+| `0x7aa5032000` (4 MB RWX), `0x7a9a3a6000` | packer workspaces (libengine refs) |
+
+## 4) Packer identification (live strings, identical family as earlier static run)
+
+```
+[Elf_Reader] [READ] %d : %s        [READ] %s           [LinkImage] called %s
+[SOINFO] init proxy called %s      [SINGAL] apply_symbol_overrides on : %s [%d]
+[INJECTION] %s -> %s               __dl__ZNK6soinfo10get_sonameEv
+/proc/self/fd/%d                   (/data/app/[^/]+/([^/]+)-[^/]+/)
+frida            gadget            libjdwp.so            Intel
+```
+⇒ SO packer with ELF parsing, symbol overriding, `/proc/self/fd` based dlopen, and
+anti-Frida (`frida`, `gadget`) + anti-debug (`libjdwp.so`) checks.
+
+## 5) What is still missing for 100%
+
+1. Plaintext of the 6 `ilil` strings — needs the decoder emulated (`0x776980` + object methods) or
+   an in-app invocation while logged in.
+2. Full `.rodata` blob table plaintext (496 entries) — same blocker, plus the per-entry length map.
+3. Full `.text` disassembly (`objdump -d`) — plaintext, can be completed in CI.

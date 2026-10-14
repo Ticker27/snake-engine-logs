@@ -1,0 +1,28 @@
+=== MemScan pid=21298 maxSecs=600 ===
+anon readable regions: 1174
+HIT 25e4000 size=15491072 perm=rw-p path=[anon:dalvik-zygote :: ilil=2 getApplicationInfo=1 
+HIT 7900000000 size=14155776 perm=rw-p path= :: snakeseller=12 snakeengine=4 
+  url: .`+........_eK@322142888...v...lb.4........tv..............v...tb..........QUf.............v...tb7.R.......https://rest.snakeseller.com/api/request/.......v...v..#........_Lec@261304576..v...xb.10.......SecurityContext_Allocate........v...x..5........................v...{b.8........Padam...........v...............route
+HIT 7901680000 size=524288 perm=rw-p path= :: snakeseller=1 
+  url: ............bK...........H........?.........!...............bI.....IDh..p...Dh..Dh.........\.....G.`.......https://rest.snakeseller.com/api/files/3.jpg?r=4........1u..@...qOG...x..OG.!.E.q.......I.h.I.h.I.h.I.h.I.h.I.h..................................................................................z........h.y.......@
+HIT 7a3a572000 size=2416640 perm=rwxp path= :: pjowqpxe=1 ilil=1 
+  ctx: ................................................................................................................................................................pjowqpxe........................................................................................................................................................................................................................................................................................................................
+HIT 7a3a7c1000 size=8519680 perm=rw-p path=[anon:scudo:secondary] :: libengine=1 
+HIT 7a9a3a6000 size=200704 perm=rwxp path= :: libengine=1 
+HIT 7aa5032000 size=4161536 perm=rwxp path= :: libengine=1 
+HIT 7ab6b30000 size=49152 perm=rwxp path= :: com/snake/helper/Native=1 getApplicationInfo=1 
+HIT 7ab6b5c000 size=4096 perm=rwxp path= :: com/snake/helper/Native=1 
+HIT 7b61c8a000 size=262144 perm=rw-p path=[anon:scudo:primary] :: libengine=1 
+HIT 7b61cca000 size=262144 perm=rw-p path=[anon:scudo:primary] :: libengine=2 
+HIT 7bd1c99000 size=262144 perm=rw-p path=[anon:scudo:primary] :: snakeengine=4 
+HIT 7c11c96000 size=262144 perm=rw-p path=[anon:scudo:primary] :: snakeseller=1 snakeengine=3 
+  url: ............................................................................................X.............'https://rest.snakeseller.com/api/files/'https://storage.googleapis.com/reporst/..................SEVIP..{"ar":"1.jpg?r=4"}.{"ar":"Best Cheat Engine ."}.{"ar":"Read More"}.https:///www.snakeengine.com.{"ar":"2.jpg?
+HIT 7c61c99000 size=786432 perm=rw-p path=[anon:scudo:primary] :: snakeseller=1 snakeengine=1 
+  url: ............u.a|....=.#z.........v............a|......a|......a|...........<.r.z.................h.........https://rest.snakeseller.com/api/files/................L........ .......H...|......................................................#z...........................P...z.................J]...........#z.......z...p3..|
+HIT 7c61d59000 size=262144 perm=rw-p path=[anon:scudo:primary] :: snakeengine=2 
+HIT 7c81c95000 size=524288 perm=rw-p path=[anon:scudo:primary] :: libengine=1 
+HIT 7c81d15000 size=262144 perm=rw-p path=[anon:scudo:primary] :: snakeengine=3 
+HIT 7d8d5e3000 size=69632 perm=rw-p path=[anon:bionic_alloc_small_objects] :: libengine=1 
+HIT 7d8d656000 size=393216 perm=r--p path=[anon:linker_alloc] :: libengine=1 
+TOTAL scanned bytes: 378478592 in 25s
+=== MemScan DONE ===
