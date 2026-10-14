@@ -1,0 +1,88 @@
+# Snake Engine 2.2.6 — กกไกตรวจสอบรหัส/สิทธิ์ (Install · Launch · token · package.conf)
+
+**สรุปสั้น:** การตรวจรหัสของแอปนี้ **ไม่ใช่การเช็คค่าเดียว** แต่เป็น 4 ชั้นที่ผูกกัน
+`C2 token (Dart) → Java bridge (Entry.C) → sandbox package state (package.conf / BPackageUserState)
+→ native verifier (Native.chl/djp + device ID)` และ **โค้ดที่ทำการตรวจไม่ได้อยู่ใน `classes.dex`**
+(พิสูจน์แล้ว: ไม่มี caller ของ `Native.*` ใน classes.dex) — มันถูกโหลดเป็น **DEX ในหน่วยความจำตอนรัน**
+และถูกซ่อนด้วย packer (`libengine.so`, 496 encrypted blobs) ⇒ นี่คือเหตุผลที่ static อ่านไม่ครบ
+
+## 1) หลักฐานเชิงประจักษ์ในรอบนี้
+
+| การทดสอบ | ผล |
+|---|---|
+| `androguard` บน `classes.dex` (5,448 classes / 34,990 methods) | **0 xref** ไปยัง `Native.ilil/djp/chl/...` ทุกตัว ⇒ ตัวเรียกอยู่ใน DEX อื่น |
+| ค้น `com/app/framework`, `BPackageUserState`, `BlackBox`, `BTokenManager` ใน classes.dex | **0 hit** (มีแต่ `package.conf`, `BUser`, `BPackage`, `keydata`, `access_token`, `device_id`) |
+| `DexFind` สแกน `/proc/<pid>/mem` (root) | เจอ **99 DEX ในหน่วยความจำ** (2 KB – 10.9 MB); ของแอปเอง = 3.88 MB (Flutter + `com/snake/helper`) ×2, ที่เหลือเป็น framework ของ MIUI/AOSP (ดู `inmem-dex-map.log`) |
+| `root/data/app` | **ว่าง** ⇒ sandbox framework (`com.app.framework.core.*`) จะถูกโหลดก็ต่อเมื่อ **มีเป้าหมายถูกติดตั้ง/รัน** |
+
+## 2) Install — จุดตรวจรหัสครั้งที่ 1
+
+```
+Dart (C2: POST https://rest.snakeseller.com/api/request/  ← license/device/key)
+   └─ ตอบกลับ: รายการเป้าหมาย + token
+        └─ MethodChannel  "Entry.C"
+             ├─ code "G"  → yu0.h().A(pkg, uid)   ← ตรวจสิทธิ์/สถานะติดตั้ง (boolean)
+             └─ code "H"  → s2.a()                ← ติดตั้งลง sandbox
+                  └─ เขียน  <sandbox>/data/system/<pkg>.conf   (package.conf)
+                       └─ และสำเนา APK ไว้ <sandbox>/data/app/<pkg>/base.apk
+```
+* `package.conf` = ที่เก็บ **PackageSetting ของเกสต์ต่อแพ็กเกจ** (serialize) รวม class/ชื่อ framework
+  ที่ผูกกับรุ่น (ในไฟล์ของคุณจะเห็น `androidx.core.app.CoreComponentFactory`,
+  `com.app.framework.core.system.pm.BPackageUserState`)
+* `BPackageUserState` = ธงสถานะต่อผู้ใช้ของแพ็กเกจ — `installed / stopped / hidden / launched`
+  (ตรงกับสตริง `installed`, `stopped`, `hidden`, `package.conf` ที่อยู่ใน classes.dex)
+* ⇒ **การตรวจรหัสที่ชั้น Install** = จะติดตั้งได้ต้องผ่าน token จาก C2 ก่อน (`G` คืนค่า false = หยุดทันที)
+
+## 3) Launch — จุดตรวจรหัสครั้งที่ 2
+
+```
+Launcher ของเกสต์ (จาก Dart) → ProxyActivity P0..P6  (:p0 .. :p6)   ← สตริง p0..p6 อยู่ใน classes.dex
+   └─ sandbox อ่าน package.conf  → ตรวจ BPackageUserState
+        ├─ installed? (ไม่ใช่ → ไม่มีแพ็กเกจ) 
+        ├─ stopped/hidden? (ใช่ → ถูกบล็อก)
+        └─ ผ่านแล้ว → โหลด guest APK ด้วย PathClassLoader  → ActivityThread จริง
+   └─ ก่อน/ระหว่างนี้ engine ตรวจสิทธิ์ซ้ำผ่าน native:  Native.chl(byte[]) → boolean
+```
+* `Native.chl([B)Z` = **ตัวตัดสิน true/false ของใบอนุญาต** (มี JNI signature ยืนยันจากตาราง
+  RegisterNatives ที่ถอดสดแล้ว: `+0x3000 ([B)Z` ↔ `+0x4000 chl`)
+* `Native.djp(int) → byte[] ((I)[B)` = ดึง **license blob** ไปให้ Dart (`decompressLicenses` → `flutter/keydata`)
+* `Native.ilil(int) → String ((I)Ljava/lang/String;)` = ตารางสตริงที่ถูกซ่อน (6 คีย์
+  `0xF11301/0xF11501/0xF11520/0xF11521/0xF21501/0xF31501` — ดู `ilil-key-string-table.log`)
+* **ผูกกับอุปกรณ์**: `Native.gcuid(int)` อ่าน `Settings.Secure.ANDROID_ID` ผ่าน reflection
+  (`android/provider/Settings$Secure`, `getContentResolver`, `getString`) + `getApplicationInfo`
+  + ตาราง spoof (`ro.product.*`, `dhcp.wlan0.*`, `gsm.*`, fingerprint `Samsung S7562XXS1BQC1`)
+
+## 4) token — จุดตรวจครั้งที่ 3 (ฝั่ง OAuth/ผู้ใช้)
+
+```
+InternalWebBrowser  →  https://www.snakeengine.com/topup/  → redirect  #access_token=...
+  └─ androidx.appcompat.view.menu.vx.b(url)        (Entry.C "C" = ลงทะเบียน callback)
+       └─ vx.c(long,int,String,String,String,boolean)   ← 3 สตริง = class/field/method (ได้จาก ilil(...))
+            └─ Class.forName(ilil(0xF11501))
+               getDeclaredField(ilil(0xF21501))
+               getDeclaredMethod(ilil(0xF31501))
+                  └─ เก็บ token   →  ส่งกลับ Dart ผ่าน Entry.C callback
+  └─ Dart เก็บสถานะด้วย Entry.C "B" (SharedPreferences batch put)  และอ่านด้วย "D"/"F"
+       ⇒  shared_prefs/com.snake.xml  →  <string name="cip_pub">  (ช่องคีย์สาธารณะของอุปกรณ์)
+```
+⇒ token จึงถูกใช้ 2 ทาง: (ก) เป็น **สิทธิ์เข้าใช้** (authorization) บน C2 และ (ข) เป็น **สิ่งที่ถูกเขียน/อ่าน
+ในที่เก็บของ sandbox** เพื่อยืนยันว่าสิทธิ์ยังใช้ได้กับ "เครื่องนี้" (device-bound)
+
+## 5) ทำไม `package.conf` ถึงสำคัญต่อการตรวจรหัส
+
+1. เป็น **บันทึกถาวรของสิ่งที่ติดตั้งแล้ว** — ถ้ารหัส/สิทธิ์ถูกถอน การลบ/แก้ `package.conf`
+   จะทำให้เกสต์ถูกมองว่า "ไม่ติดตั้ง" (state = not installed) → เปิดไม่ได้
+2. เก็บ **user-state** (`BPackageUserState`) ที่ sandbox ใช้ตอน Launch ⇒ เป็นจุดที่ฝั่งแอปใช้
+   "ทดสอบ" ว่าสถานะที่เก็บไว้ยังสอดคล้องกับสิทธิ์ปัจจุบัน (token & test package.conf)
+3. อยู่ใต้ sandbox root เดียวกับที่รหัสถูกตรวจ (`/data/user/0/com.snake/root/...`)
+   → ตรวจ `root/data/system/*.conf` + `root/data/app/*/base.apk` ได้ตรง ๆ
+
+## 6) สิ่งที่ยังต้องทำเพื่อปิดกล่อง (เรียงตามความคุ้มค่า)
+
+1. ให้มี **เป้าหมายติดตั้งจริง 1 ตัว** (license active) → จะเกิด `root/data/app/<pkg>/base.apk`
+   + `package.conf` และ sandbox framework DEX จะถูกโหลดในหน่วยความจำ (รัน `DexFind` ซ้ำ → ได้ DEX
+   ที่มี `com.app.framework.core.system.pm.BPackageUserState` ครบ)
+2. จาก DEX นั้น แตก `BPackageManagerService`/`BPackageUserState` → ดูพาธการเขียน `package.conf`
+   และจุดที่เรียก `Native.chl/djp` (จุดตรวจรหัสจริงทั้ง Install และ Launch)
+3. hook/emulate `0x776980` (decoder ใน `ilil-key-string-table.log`) เพื่อได้สตริง 6 คีย์ของ `ilil`
+   (จะทำให้รู้ค่า class/field/method ที่ `vx.c` ใช้จริง — ปิดเส้นทาง token ทั้งเส้น)

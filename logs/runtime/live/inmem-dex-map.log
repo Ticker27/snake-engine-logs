@@ -1,0 +1,100 @@
+inmem_7a0076b190.dex size=287556 Bcls=0 blackbox=0 classes:      30 Lcom/google/gson/       1 Lorg/xmlpull/v1/ 
+inmem_7a3026cc98.dex size=71900 Bcls=0 blackbox=0 classes: 
+inmem_7a303b22ec.dex size=797056 Bcls=0 blackbox=0 classes: 
+inmem_7a304759ec.dex size=2260 Bcls=0 blackbox=0 classes: 
+inmem_7a310b4f28.dex size=20936 Bcls=0 blackbox=0 classes: 
+inmem_7a310bb208.dex size=142580 Bcls=0 blackbox=0 classes: 
+inmem_7a310de998.dex size=2116 Bcls=0 blackbox=0 classes: 
+inmem_7a3b6149b0.dex size=3881048 Bcls=0 blackbox=0 classes:      17 Lio/flutter/view/      11 Lio/flutter/plugin/       5 Lcom/snake/helper/ 
+inmem_7a462509b0.dex size=3881048 Bcls=0 blackbox=0 classes:      17 Lio/flutter/view/      11 Lio/flutter/plugin/       5 Lcom/snake/helper/ 
+inmem_7a964b702c.dex size=438712 Bcls=0 blackbox=0 classes:       2 Lcom/miui/misight/ 
+inmem_7a9656402c.dex size=491824 Bcls=0 blackbox=0 classes:      18 Lorg/apache/http/ 
+inmem_7aa4283904.dex size=1393432 Bcls=0 blackbox=0 classes:       1 Lorg/xmlpull/v1/       1 Lorg/jetbrains/annotations/ 
+inmem_7aa43d802c.dex size=10954924 Bcls=0 blackbox=0 classes:       2 Lorg/xmlpull/v1/       1 Lcom/miui/blur/ 
+inmem_7ab8003320.dex size=1573416 Bcls=0 blackbox=0 classes:       3 Lorg/xml/sax/ 
+inmem_7ab818409c.dex size=573464 Bcls=0 blackbox=0 classes:       2 Lorg/xmlpull/v1/ 
+inmem_7ab8211310.dex size=1540916 Bcls=0 blackbox=0 classes: 
+inmem_7ab838a09c.dex size=793420 Bcls=0 blackbox=0 classes:       1 Lorg/xmlpull/v1/ 
+inmem_7ab844c09c.dex size=752032 Bcls=0 blackbox=0 classes:       6 Lcom/android/internal/       1 Lcom/android/ipsec/ 
+inmem_7ab850409c.dex size=991816 Bcls=0 blackbox=0 classes: 
+inmem_7ab85f709c.dex size=594244 Bcls=0 blackbox=0 classes:       1 Lcom/android/org/ 
+inmem_7ab868952c.dex size=1439384 Bcls=0 blackbox=0 classes: 
+inmem_7ab87e92d0.dex size=3059292 Bcls=0 blackbox=0 classes:       2 Lcom/android/i18n/       1 Lorg/xmlpull/v1/       1 Lcom/android/icu/ 
+inmem_7ab8ad509c.dex size=773936 Bcls=0 blackbox=0 classes:       4 Lcom/miui/misight/       1 Lorg/xmlpull/v1/       1 Lcom/xiaomi/cdc/ 
+inmem_7ab8b920d8.dex size=7204120 Bcls=0 blackbox=0 classes:       9 Lcom/xiaomi/engine/       7 Lcom/xiaomi/reflect/       6 Lcom/miui/whetstone/ 
+inmem_7ab92711dc.dex size=746180 Bcls=0 blackbox=0 classes: 
+inmem_7ab932809c.dex size=825916 Bcls=0 blackbox=0 classes: 
+inmem_7ab93f209c.dex size=5676968 Bcls=0 blackbox=0 classes:       9 Lcom/android/internal/       5 Lcom/android/ims/       2 Lorg/xmlpull/v1/ 
+inmem_7ab995ddd8.dex size=830912 Bcls=0 blackbox=0 classes:     545 Lcom/kousei/framework/       1 Lorg/xmlpull/v1/ 
+inmem_7ab9a29204.dex size=3011408 Bcls=0 blackbox=0 classes:      12 Lcom/xiaomi/reflect/       5 Lcom/miui/nbi/       4 Lcom/android/internal/ 
+inmem_7ab9d098fc.dex size=9365724 Bcls=0 blackbox=0 classes:     253 Lcom/android/internal/       4 Lorg/w3c/dom/       4 Lcom/android/apex/ 
+inmem_7aba5f9198.dex size=10230284 Bcls=0 blackbox=0 classes:       6 Lorg/xml/sax/       2 Lorg/xmlpull/v1/       1 Lorg/ccil/cowan/ 
+inmem_7abafbbf28.dex size=9748100 Bcls=0 blackbox=0 classes:       5 Lorg/xml/sax/       2 Lorg/xmlpull/v1/       1 Lcom/miui/base/ 
+inmem_7abb908764.dex size=9085292 Bcls=0 blackbox=0 classes:       2 Lorg/xmlpull/v1/       2 Lcom/xiaomi/reflect/       1 Lcom/miui/base/ 
+inmem_7abc1b3bc4.dex size=9819560 Bcls=0 blackbox=0 classes:       4 Lorg/xml/sax/       2 Lorg/xmlpull/v1/       2 Lcom/miui/misight/ 
+inmem_7abcb1208c.dex size=1043912 Bcls=0 blackbox=0 classes:      25 Lorg/w3c/dom/      12 Lorg/xml/sax/      12 Lorg/apache/xml/ 
+inmem_7abcc1108c.dex size=1028740 Bcls=0 blackbox=0 classes: 
+inmem_7abcd0d528.dex size=6054184 Bcls=0 blackbox=0 classes:       7 Lorg/w3c/dom/       5 Lorg/xml/sax/       1 Lcom/android/art/ 
+inmem_7abe23808c.dex size=563880 Bcls=0 blackbox=0 classes: 
+inmem_7ac037b09c.dex size=541520 Bcls=0 blackbox=0 classes:       4 Lcom/xiaomi/gwsd/       3 Lcom/xiaomi/gba/       1 Lcom/xiaomi/telecom/ 
+inmem_7ac1c0109c.dex size=555900 Bcls=0 blackbox=0 classes:      13 Lcom/android/ims/       2 Lorg/xmlpull/v1/       1 Lcom/android/telephony/ 
+inmem_7d51f7d370.dex size=535560 Bcls=0 blackbox=0 classes: 
+inmem_7d54e0d08c.dex size=634576 Bcls=0 blackbox=0 classes:      31 Lorg/w3c/dom/      19 Lorg/xml/sax/       3 Lorg/xmlpull/v1/ 
+inmem_7d5698002c.dex size=425884 Bcls=0 blackbox=0 classes:       2 Lcom/miui/misight/ 
+inmem_7d7560402c.dex size=273800 Bcls=0 blackbox=0 classes: 
+inmem_7d791b708c.dex size=71660 Bcls=0 blackbox=0 classes:       2 Lcom/xiaomi/extensions/ 
+inmem_7d7b0ae02c.dex size=31980 Bcls=0 blackbox=0 classes: 
+inmem_7d7b0b902c.dex size=9456 Bcls=0 blackbox=0 classes: 
+inmem_7d7b0bd02c.dex size=33572 Bcls=0 blackbox=0 classes: 
+inmem_7d7ee0002c.dex size=29692 Bcls=0 blackbox=0 classes: 
+inmem_7d7ee0802c.dex size=12620 Bcls=0 blackbox=0 classes: 
+inmem_7d7ee0c02c.dex size=7740 Bcls=0 blackbox=0 classes: 
+inmem_7d7f5eb02c.dex size=82800 Bcls=0 blackbox=0 classes: 
+inmem_7d8216e09c.dex size=430784 Bcls=0 blackbox=0 classes: 
+inmem_7d821e302c.dex size=66564 Bcls=0 blackbox=0 classes: 
+inmem_7d8333f09c.dex size=728 Bcls=0 blackbox=0 classes: 
+inmem_7d8801e2e8.dex size=300984 Bcls=0 blackbox=0 classes: 
+inmem_7d8c0e5a44.dex size=276076 Bcls=0 blackbox=0 classes:       6 Lcom/android/internal/       5 Lorg/w3c/dom/       2 Lorg/xml/sax/ 
+inmem_7d8c32608c.dex size=808 Bcls=0 blackbox=0 classes: 
+inmem_7d8c85309c.dex size=216552 Bcls=0 blackbox=0 classes: 
+inmem_7d8c89409c.dex size=386140 Bcls=0 blackbox=0 classes: 
+inmem_7d8c90b09c.dex size=204300 Bcls=0 blackbox=0 classes: 
+inmem_7d8c94009c.dex size=293844 Bcls=0 blackbox=0 classes:       3 Lcom/android/ondevicepersonalization/       1 Lcom/android/federatedcompute/ 
+inmem_7d8c9e909c.dex size=208068 Bcls=0 blackbox=0 classes: 
+inmem_7d8ca4809c.dex size=122508 Bcls=0 blackbox=0 classes: 
+inmem_7d8ca6a09c.dex size=87004 Bcls=0 blackbox=0 classes: 
+inmem_7d8ca8009c.dex size=106872 Bcls=0 blackbox=0 classes: 
+inmem_7d8ca9b09c.dex size=129996 Bcls=0 blackbox=0 classes: 
+inmem_7d8cac709c.dex size=216152 Bcls=0 blackbox=0 classes: 
+inmem_7d8cafc338.dex size=77948 Bcls=0 blackbox=0 classes:       1 Lorg/xmlpull/v1/ 
+inmem_7d8cb3c09c.dex size=169828 Bcls=0 blackbox=0 classes: 
+inmem_7d8cba509c.dex size=728 Bcls=0 blackbox=0 classes: 
+inmem_7d8cbb709c.dex size=96544 Bcls=0 blackbox=0 classes: 
+inmem_7d8cbcf08c.dex size=295720 Bcls=0 blackbox=0 classes:      12 Lorg/xml/sax/       3 Lcom/android/i18n/       2 Lorg/ccil/cowan/ 
+inmem_7d8cc2109c.dex size=247348 Bcls=0 blackbox=0 classes: 
+inmem_7d8cdcb09c.dex size=120476 Bcls=0 blackbox=0 classes:       1 Lcom/android/telephony/ 
+inmem_7d8cdef09c.dex size=57092 Bcls=0 blackbox=0 classes: 
+inmem_7d8cdfd08c.dex size=370188 Bcls=0 blackbox=0 classes:      28 Lcom/android/okhttp/ 
+inmem_7d8ce6508c.dex size=52216 Bcls=0 blackbox=0 classes: 
+inmem_7d8ce7208c.dex size=224204 Bcls=0 blackbox=0 classes: 
+inmem_7d8ceaa08c.dex size=23200 Bcls=0 blackbox=0 classes: 
+inmem_7d8ceb009c.dex size=107184 Bcls=0 blackbox=0 classes:       8 Lcom/qualcomm/wfd/ 
+inmem_7d8cef909c.dex size=24616 Bcls=0 blackbox=0 classes:       3 Lcom/android/uprobestats/ 
+inmem_7d8cf0008c.dex size=59920 Bcls=0 blackbox=0 classes: 
+inmem_7d8cf7509c.dex size=33096 Bcls=0 blackbox=0 classes: 
+inmem_7d8cfdb08c.dex size=3788 Bcls=0 blackbox=0 classes: 
+inmem_7d8d01d08c.dex size=12852 Bcls=0 blackbox=0 classes: 
+inmem_7d8d0ae08c.dex size=35496 Bcls=0 blackbox=0 classes: 
+inmem_7d8d0b709c.dex size=46992 Bcls=0 blackbox=0 classes: 
+inmem_7d8d0f809c.dex size=32924 Bcls=0 blackbox=0 classes:       2 Lcom/qualcomm/qti/ 
+inmem_7d8d17709c.dex size=23340 Bcls=0 blackbox=0 classes: 
+inmem_7d8d17d09c.dex size=31364 Bcls=0 blackbox=0 classes:       1 Lorg/codeaurora/internal/ 
+inmem_7d8d2471b4.dex size=14208 Bcls=0 blackbox=0 classes: 
+inmem_7d8d2e809c.dex size=17532 Bcls=0 blackbox=0 classes: 
+inmem_7d8d5c509c.dex size=7788 Bcls=0 blackbox=0 classes: 
+inmem_7d8d5c709c.dex size=7056 Bcls=0 blackbox=0 classes: 
+inmem_7d8d5cb08c.dex size=808 Bcls=0 blackbox=0 classes: 
+inmem_7d8d5cc09c.dex size=14144 Bcls=0 blackbox=0 classes: 
+inmem_7d8d5d109c.dex size=728 Bcls=0 blackbox=0 classes: 
+inmem_7d8d5d208c.dex size=3788 Bcls=0 blackbox=0 classes: 
+DONE
