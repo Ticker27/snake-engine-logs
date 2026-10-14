@@ -1,0 +1,142 @@
+# Snake Engine 2.2.6 — ลองติดตั้งเป้าหมายจริง `com.miniclip.eightballpool` 56.31.1 (4039)
+
+## 0) สถานะเป้าหมายบนเครื่อง
+```
+package           com.miniclip.eightballpool
+versionName       56.31.1          versionCode 4039
+minSdk 23 / targetSdk 36            primaryCpuAbi arm64-v8a
+codePath          /data/app/~~LA6DB92nbY3UngmYZ83asA==/com.miniclip.eightballpool-khEkaoTjzb-gIKJ1lezcIg==
+base.apk          149 MB  (lastUpdateTime 2026-10-12 01:30:48)
+signature         v3  d51b41b / signer 315a8d14
+```
+⇒ **ตรงกับเป้าหมายที่ระบุ (56.31.1 / 4039) เป๊ะ** ไม่ต้องดาวน์โหลดใหม่ (ในเครื่องมี APKPure 56.30.0, 56.31.0 ใน `/sdcard/Download` ด้วย)
+
+## 1) ทะเบียนเป้าหมายที่แอปถือไว้ (พบในหน่วยความจำสด)
+
+แอปเก็บ **registry ของเกมเป้าหมาย** ในรูปแบบ
+
+```
+<apk path> <versionName>@<sha256>
+/data/app/~~LA6DB92nbY3UngmYZ83asA==/com.miniclip.eightballpool-khEkaoTjzb-gIKJ1lezcIg==/base.apk
+56.31.1@5bee86eda78132ef1f5610e153ca3f20ba71fb8ea2c3de147a5ee65bc0d22405
+```
+
+* ค่าที่เก็บ = `versionName @ SHA-256` ⇒ **จุด "test" ที่แอปใช้ตรวจ APK เป้าหมายก่อนติดตั้ง/รัน**
+  (เทียบกับ `PathClassLoader` ที่โหลด `base.apk` + libDir `data/user/%d/%s/lib` ตาม §2 ของ log ก่อนหน้า)
+* ตรวจกับเครื่องจริง: `sha256sum base.apk` ของ 8 Ball Pool ที่ติดตั้ง = `d6c94873c7f8c8ff948dc72854bedad6b85e5e66e0acd04e0a85ec6dcd2df45b`
+  → **ไม่ตรงกับ `5bee86ed…`** ที่แอปเก็บไว้ (เครื่องนี้ถูกอัปเดตจาก Play เมื่อ 10-12 01:30 ⇒ hash ที่แอปถือเป็นของบิลด์ที่มันคาดหวัง)
+  นี่คือหลักฐานว่าแอป **ตรวจเวอร์ชัน+แฮชของ APK เป้าหมายจริง**
+
+## 2) แคตตาล็อกเกมเป้าหมาย (68 รายการที่พบในหน่วยความจำ — เรียงตามที่แอปเก็บ)
+
+```
+com.ea.simcitymobile.mi
+com.netease.lrs.mi
+com.tencent.game
+com.tgg.kidscooking.dbzq.m
+com.joygame.atm.mi
+com.fuyun.longzhu.fish.mi
+com.hero.sm.mi
+com.huoshe.mndwdzz.mi
+com.popcap.pvz2xm
+com.moli.minigame.hole.mi
+com.mf.monsterblast.mi
+com.yingxiong.dfzj.hero
+com.tencent.af
+com.dts.freefireth
+com.ludo.king
+com.king.candycrushsaga
+com.mobile.legends
+com.tencent.iglite
+com.supercell.clashofclans
+com.miniclip.carrom
+com.supercell.brawlstars
+com.block.puzzle.game.hippo.mi
+com.mojang.minecraftpe
+com.logame.eliminateintruder3d
+com.wildspike.wormszone
+com.crazy.juicer.xm
+com.supercell.clashroyale
+com.activision.callofduty.shooter
+com.bubble.free.bubblestory
+io.teslatech.callbreak
+com.rubygames.assassin
+com.playrix.gardenscapes
+com.outfit7.mytalkingtomfriends
+com.miniclip.eightballpool
+com.sukhavati.gotoplaying.bubble
+com.playrix.homescapes
+com.king.candycrushsodasaga
+com.rioo.runnersubway
+com.outfit7.mytalkingtom2
+com.nianticlabs.pokemongo
+com.fingersoft.hillclimb
+jp.konami.pesam
+com.moonactive.coinmaster
+com.hippogames.ludosaga.mi
+com.teenpatti.hd.gold
+com.pop.bubble.shooter.blast.mi
+com.moonfrog.ludo.club
+com.water.balls
+com.imangi.templerun
+com.pubg.krmobile
+com.differencetenderwhite.skirt
+com.outfit7.talkingtomgoldrun
+com.octro.teenpatti
+com.neptune.domino
+com.outfit7.herodash
+com.playrix.fishdomdd.gplay
+com.axlebolt.standoff2
+com.billiards.city.pool.nation.club
+com.app.rescuecut
+com.appsomniacs.da2
+com.redforcegames.stack.colors
+io.yarsa.games.ludo
+com.pixel.art.coloring.color.number
+com.king.farmheroessaga
+com.blacklightsw.ludo
+jp.garud.ssimulator
+com.yourstoryinteractive.sails.pirate.adventure
+air.com.ace2thre
+```
+(Free Fire · Mobile Legends · CODM · PUBG KR · Clash of Clans/Royale · Brawl Stars · Minecraft PE ·
+Pokémon GO · Standoff 2 · eFootball · Candy Crush ×2 · Gardenscapes/Homescapes/Fishdom · Talking Tom ×3 ·
+Ludo King / Ludo Club / Yarsa Ludo · Teen Patti / Octro · 8 Ball Pool · Carrom Pool · Callbreak · Subway Surfers …
+→ ไฟล์เต็ม: `target-catalog.txt`)
+
+## 3) ผลการติดตั้งจริง — **ถูกบล็อกที่ gate การสมัครสมาชิกรายเกม**
+
+ทำตามขั้นตอนจริงบนเครื่อง (เปิด `com.snake/com.Entry` → เลือกการ์ด 8 Ball Pool):
+
+```
+┌──────────── Warning ────────────┐
+│  8 Ball Pool , You don't have   │
+│  any active subscription for    │
+│  this game.                     │
+│           [ Close ]             │
+└─────────────────────────────────┘
+```
+สตリングหลักฐาน (พบใน Dart heap ของโปรเซสจริง):
+* `You don't have any active subscription for this game`   ← ข้อความ gate
+* `The target device already has an active subscription, please use another device ID`  ← gate ฝั่งผูกอุปกรณ์
+* ประกอบเป็น dialog `Warning` + ข้อความ (แสดงชื่อเกมนำหน้า: `8 Ball Pool , …`)
+
+ผลข้างเคียงที่ยืนยันว่ายังไม่เกิดการติดตั้ง:
+```
+/data/user/0/com.snake/root/data/app           (ว่าง)
+/data/user/0/com.snake/root/system             (ว่าง — ไม่มี package.conf/uid.conf/…)
+/data/user/0/com.snake/shared_prefs/com.snake.xml → <string name="cip_pub"></string>  (ว่าง)
+find /data/user/0/com.snake -name '*.conf'      → ไม่พบไฟล์
+```
+⇒ **ยังไม่มี conf ใดถูกเขียน และ sandbox framework DEX ยังไม่ถูกโหลด** (สอดคล้องกับ §5 ของ log ก่อนหน้า)
+
+## 4) ต้องทำอะไรต่อเพื่อให้การติดตั้งสำเร็จ (และเก็บ conf ทั้ง 6)
+
+1. **เปิด subscription ของเกมนี้** (8 Ball Pool) ให้กับ ID ที่แสดงบนหัวแอป (`458043`) — ผ่าน
+   `Get Subscription` → `snakeengine.com/topup` (หรือให้แอดมิน/นักพัฒนาเปิดสิทธิ์ให้เอง)
+2. จากนั้นทำซ้ำ: แตะการ์ด 8 Ball Pool → ติดตั้ง → คาดว่าจะเกิด
+   `root/data/app/com.miniclip.eightballpool/base.apk` + `root/data/system/{package,uid,user,shared-user,accounts,fake-location}.conf`
+3. รัน `DexFind` + `MemScan` ซ้ำ → จะได้ DEX ของ sandbox framework
+   (`com.app.framework.core.system.pm.BPackageUserState`) และจุดเรียก `Native.chl/djp` ในเส้นทาง Install/Launch
+
+*หมายเหตุ: รอบนี้ทำเฉพาะ "การสังเกตกลไก" — ไม่มีการดัดแปลง/บายพาสการตรวจสอบสิทธิ์แต่อย่างใด*

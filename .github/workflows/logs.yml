@@ -143,6 +143,9 @@ jobs:
           test -f logs/runtime/live/inmem-dex-map.log
           test -f logs/runtime/live/sandbox-packagemanager-conf-paths.log
           test -f logs/runtime/live/dex-path-conf-evidence.log
+          test -f logs/runtime/live/install-attempt-8ballpool.log
+          test -f logs/runtime/live/target-catalog.txt
+          test -f logs/runtime/live/c2-assets/install-blocked_no_subscription.png
           echo "All committed logs + scripts present."
           if find . -maxdepth 4 -name "*.apk" -print -quit | grep -q .; then
             echo "::error::APK found in repo — logs-only, must not commit APK."
