@@ -1,0 +1,9 @@
+
+Dynamic section at offset 0x560020 contains 6 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000004 (HASH)               0x154920
+ 0x0000000000000005 (STRTAB)             0x154808
+ 0x000000000000000a (STRSZ)              133 (bytes)
+ 0x0000000000000006 (SYMTAB)             0x154890
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000000 (NULL)               0x0

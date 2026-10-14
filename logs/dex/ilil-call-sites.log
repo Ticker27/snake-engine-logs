@@ -1,0 +1,32 @@
+# ilil String Table — Call Sites (DEX: 5,448 classes)
+# Extracted via androguard DEX disasm — static analysis only
+
+## Summary: 7 call sites, 6 unique constants
+
+| const     | hex      | high | Caller                    | Next instruction (decoded) |
+|-----------|----------|------|---------------------------|----------------------------|
+| 15799041  | 0xF11301 | 0xF1 | vx.b(String,long,boolean) | k.equals(ilil(0xF11301)) after Uri.decode — OAuth param name |
+| 15799553  | 0xF11501 | 0xF1 | vx.c(long,int,...)        | Class.forName(ilil(0xF11501), true, vx.d()) |
+| 15865089  | 0xF21501 | 0xF2 | vx.c(...)                 | getDeclaredField(ilil(0xF21501)) -> setLong(ts) |
+| 15930625  | 0xF31501 | 0xF3 | vx.c(...)                 | getDeclaredMethod(ilil(0xF31501), int,String,String,int) -> invoke |
+| 15799584  | 0xF11520 | 0xF1 | vx.f(Activity,String,...) | yu0.e(ilil(0xF11520), ilil(0xF11521)) -> VirtualCore init |
+| 15799585  | 0xF11521 | 0xF1 | vx.f(...)                 | (pair with above) |
+| 1, 61     | 0x01,0x3D| 0x00 | vx.b(...)                 | indexOf('#'=35), indexOf('='=61) — fragment parsing |
+
+## Encoding: high byte = table id (F1/F2/F3), low 16-bit = offset
+## Status: plaintext is encrypted in libengine.so .text — requires Frida runtime dump
+## See: docs/SnakeEngine_DeepDive_ilil_Dart.md Section 1 for full pseudo-code and offsets
+
+C++ Offsets (file off = VA, load base 0):
+  JNI_OnLoad    0xF3FA0  size 12388  .text  (readelf -s confirms GLOBAL FUNC)
+  .mytext stub  0x81EEAC size 0xF4   .mytext (2 func, anti-debug)
+  helper 1      0xB01C4  .text (decrypt, called from mytext)
+  helper 2      0xB134C  .text (decrypt, cbnz 0xB1894)
+  RegisterNatives heap 0xA405... (runtime only, 11 methods: ac,aior,awl,chl,djp,eio,i,ic,il,ilil,pjowqpxe,update)
+
+## Frida one-liner to dump plaintext (run on device):
+# frida -U -f com.snake --no-pause -l - <<'JS'
+# Java.perform(()=>{const N=Java.use("com.snake.helper.Native");
+#   N.ilil.overload('int').implementation=function(k){const r=this.ilil(k);console.log(`[ilil] ${k} 0x${k.toString(16)} => ${r}`);return r;};
+#   [15799041,15799553,15865089,15930625,15799584,15799585].forEach(k=>console.log(N.ilil(k)));});
+# JS

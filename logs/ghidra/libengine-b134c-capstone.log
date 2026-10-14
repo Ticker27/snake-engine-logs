@@ -1,0 +1,50 @@
+  000b134c: sub          sp, sp, #0xd0
+  000b1350: stp          x29, x30, [sp, #0x70]
+  000b1354: add          x29, sp, #0x70
+  000b1358: stp          x28, x27, [sp, #0x80]
+  000b135c: stp          x26, x25, [sp, #0x90]
+  000b1360: stp          x24, x23, [sp, #0xa0]
+  000b1364: stp          x22, x21, [sp, #0xb0]
+  000b1368: stp          x20, x19, [sp, #0xc0]
+  000b136c: mrs          x20, tpidr_el0
+  000b1370: adrp         x9, #0x828000
+  000b1374: ldr          x8, [x20, #0x28]
+  000b1378: mov          x27, x1
+  000b137c: mov          x28, x0
+  000b1380: stur         x8, [x29, #-8]
+  000b1384: ldr          w8, [x9, #0xd90]
+  000b1388: cmp          w8, #0x1d
+  000b138c: b.lt         #0xb2478
+  000b1390: adrp         x25, #0x836000
+  000b1394: mov          w24, #0x3c0
+  000b1398: movk         w24, #0xd65f, lsl #16
+  000b139c: ldr          x19, [x25, #0xbf8]
+  000b13a0: cbnz         x19, #0xb1894
+  000b13a4: mov          x0, xzr
+  000b13a8: mov          w1, #0xc
+  000b13ac: mov          w2, #7
+  000b13b0: mov          w3, #0x22
+  000b13b4: mov          x4, #-1
+  000b13b8: mov          x5, xzr
+  000b13bc: mov          w8, #0xde
+  000b13c0: svc          #0
+  000b13c4: mov          x19, x0
+  000b13c8: cmn          x0, #1
+  000b13cc: b.ne         #0xb1868
+  000b13d0: mov          w0, #0x27
+  000b13d4: stp          x20, x19, [sp, #0x20]
+  000b13d8: stp          x28, x27, [sp, #0x10]
+  000b13dc: mov          w24, #-0x2be00000
+  000b13e0: bl           #0x81f110
+  000b13e4: lsr          x8, x0, #2
+  000b13e8: adrp         x19, #0x11000
+  000b13ec: cmp          x8, #1
+  000b13f0: mov          x22, x0
+  000b13f4: mov          x25, xzr
+  000b13f8: csinc        x27, x8, xzr, hi
+  000b13fc: add          x28, sp, #0x30
+  000b1400: add          x19, x19, #0x914
+  000b1404: mov          x0, xzr
+  000b1408: mov          x1, x22
+  000b140c: mov          w2, #7
+  000b1410: mov          w3, #0x22

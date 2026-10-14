@@ -1,0 +1,61 @@
+  0081eeac: ret          
+  0081eeb0: ret          
+  0081eeb4: stp          x29, x30, [sp, #-0x20]!
+  0081eeb8: stp          x20, x19, [sp, #0x10]
+  0081eebc: mov          x29, sp
+  0081eec0: ldr          x8, [x0]
+  0081eec4: mov          x1, x3
+  0081eec8: mov          x19, x2
+  0081eecc: mov          x20, x0
+  0081eed0: ldr          x8, [x8, #0x38]
+  0081eed4: blr          x8
+  0081eed8: mov          x2, x0
+  0081eedc: mov          x0, x20
+  0081eee0: mov          x1, x19
+  0081eee4: bl           #0xb01c4
+  0081eee8: adrp         x8, #0x828000
+  0081eeec: ldrsw        x8, [x8, #0xd98]
+  0081eef0: ldr          w9, [x0, x8]
+  0081eef4: orr          w10, w9, #1
+  0081eef8: cmp          w10, w9
+  0081eefc: b.eq         #0x81ef08
+  0081ef00: mov          w9, w10
+  0081ef04: str          w10, [x0, x8]
+  0081ef08: adrp         x10, #0x828000
+  0081ef0c: ldr          w10, [x10, #0xd90]
+  0081ef10: cmp          w10, #0x1d
+  0081ef14: b.lt         #0x81ef28
+  0081ef18: orr          w10, w9, #0x10000000
+  0081ef1c: cmp          w10, w9
+  0081ef20: b.eq         #0x81ef28
+  0081ef24: str          w10, [x0, x8]
+  0081ef28: ldp          x20, x19, [sp, #0x10]
+  0081ef2c: ldp          x29, x30, [sp], #0x20
+  0081ef30: ret          
+  0081ef34: stp          x29, x30, [sp, #-0x10]!
+  0081ef38: mov          x29, sp
+  0081ef3c: mov          x1, x3
+  0081ef40: bl           #0xb134c
+  0081ef44: adrp         x8, #0x828000
+  0081ef48: ldrsw        x8, [x8, #0xd98]
+  0081ef4c: ldr          w9, [x0, x8]
+  0081ef50: orr          w10, w9, #1
+  0081ef54: cmp          w10, w9
+  0081ef58: b.eq         #0x81ef64
+  0081ef5c: mov          w9, w10
+  0081ef60: str          w10, [x0, x8]
+  0081ef64: adrp         x10, #0x828000
+  0081ef68: ldr          w10, [x10, #0xd90]
+  0081ef6c: cmp          w10, #0x1d
+  0081ef70: b.lt         #0x81ef88
+  0081ef74: orr          w10, w9, #0x10000000
+  0081ef78: cmp          w10, w9
+  0081ef7c: b.eq         #0x81ef88
+  0081ef80: mov          w9, w10
+  0081ef84: str          w10, [x0, x8]
+  0081ef88: and          w10, w9, #0xffffffef
+  0081ef8c: cmp          w10, w9
+  0081ef90: b.eq         #0x81ef98
+  0081ef94: str          w10, [x0, x8]
+  0081ef98: ldp          x29, x30, [sp], #0x10
+  0081ef9c: ret          

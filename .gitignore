@@ -1,0 +1,5 @@
+*.apk
+*.so
+*.dex
+*.prof
+*.profm

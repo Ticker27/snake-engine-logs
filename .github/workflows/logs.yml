@@ -1,0 +1,71 @@
+name: Snake Engine Logs — readelf -sida / Ghidra (assemble only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload_artifact:
+        description: Upload logs artifact
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+# SOUL.md: Use GitHub Actions for assembling files only; CI uses a suitable environment.
+# This workflow ONLY assembles logs/readelf + logs/ghidra as an artifact — it never runs CI checks.
+concurrency:
+  group: snake-logs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  assemble-logs:
+    name: Assemble readelf -sida + Ghidra logs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Install tools (binutils + androguard + capstone)
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends binutils ripgrep python3-pip
+          pip install --quiet androguard capstone
+
+      - name: Verify committed logs (no APK in repo)
+        run: |
+          set -euo pipefail
+          echo "Checking that logs/ was committed by rebuild_readelf_logs.sh (suitable environment)..."
+          test -f logs/readelf/libengine-symbols.log
+          test -f logs/readelf/libengine-sections.log
+          test -f logs/readelf/libengine-dynamic.log
+          test -f logs/readelf/libapp-symbols.log
+          test -f logs/ghidra/libengine-jni_onload-capstone.log
+          test -f logs/ghidra/libengine-mytext-capstone.log
+          test -f logs/dex/ilil-call-sites.log
+          test -f logs/manifest/AndroidManifest-decoded.xml
+          test -f docs/SnakeEngine_Analysis_Report.md
+          echo "All expected logs present."
+          echo "No APK should be committed:"
+          if find . -maxdepth 4 -name "*.apk" -print -quit | grep -q .; then
+            echo "::error::APK found in repo — logs-only repo must not commit the APK binary."
+            exit 1
+          fi
+
+      - name: Re-assemble logs from committed APK asset (if provided as artifact)
+        if: false
+        run: echo "This job only packages already-committed logs/ — rerun scripts/rebuild_readelf_logs.sh on a suitable environment and commit the result."
+
+      - name: Upload logs artifact
+        if: ${{ inputs.upload_artifact }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: snake-engine-logs-${{ github.sha }}
+          path: |
+            logs/
+            docs/
+            scripts/rebuild_readelf_logs.sh
+          if-no-files-found: error
+          retention-days: 30
