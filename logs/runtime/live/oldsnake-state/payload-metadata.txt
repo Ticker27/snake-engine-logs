@@ -1,0 +1,11 @@
+# encrypted engine payload metadata (bytes NOT copied into this repo)
+
+libbuffer_pgl.so
+  size=86  sha256=e67a3f612d729a8988d7caea0c9b9b1c498b415cad17d06876a46f5848dbf1c8
+  first16=f670605ce88c004d0a3a4a6fca36a899  ELF_magic=no (encrypted)
+libgame-BPM-GooglePlay-Gold-Release-Module-3965.so
+  size=67904  sha256=85cfcfe2d644bb380f624fe58869a3a632f934944dc32619a0ccea92322ec014
+  first16=887584da580a3a699b7436882fc607fe  ELF_magic=no (encrypted)
+libpglarmor.so
+  size=220  sha256=f139d54ed2ac22c9567ea99da18347d61d9d87afba0cd35096c4a3c41935594d
+  first16=1b676294e537100a024a3c948f96e140  ELF_magic=no (encrypted)

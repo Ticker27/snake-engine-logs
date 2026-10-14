@@ -1,0 +1,7 @@
+# package.conf  size=173904 B  sha256=34afdbbe314314935324e5cb5aa535e5ea8ef8fae042c82038b0e5279c160d60b6b
+# format: [int32 len][UTF-16LE string] records + int32/float markers
+
+# parsed records: 1
+
+# activities=0 services=0 providers=0 receivers=0 permissions=0
+      0 len= 31  androidx.appcompat.view.menu.u6
