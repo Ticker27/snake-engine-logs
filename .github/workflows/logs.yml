@@ -57,9 +57,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/ghidra
-          key: ghidra-11.3.2-20250401
+          key: ghidra-11.3.2-20250415
 
       - name: Download Ghidra (heavy — Actions only, never Alpine PRoot)
+        continue-on-error: true
         if: ${{ github.event_name == 'push' || inputs.run_ghidra }}
         run: |
           set -euo pipefail
@@ -70,9 +71,9 @@ jobs:
           fi
           mkdir -p /tmp/ghidra
           echo "Downloading Ghidra 11.3.2 (~500MB) — heavy, Actions only..."
-          curl -L -o /tmp/ghidra.zip "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.3.2_build/ghidra_11.3.2_PUBLIC_20250401.zip"
-          unzip -q /tmp/ghidra.zip -d /tmp/ghidra
-          rm /tmp/ghidra.zip
+          curl -L --retry 3 --retry-delay 5 -o /tmp/ghidra.zip "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.3.2_build/ghidra_11.3.2_PUBLIC_20250415.zip" || { echo "::warning::Ghidra download failed — capstone/objdump logs already cover static analysis; will retry next run via cache."; exit 0; }
+          unzip -q /tmp/ghidra.zip -d /tmp/ghidra || { echo "::warning::Ghidra unzip failed"; exit 0; }
+          rm -f /tmp/ghidra.zip
           ls -lh /tmp/ghidra/ | head -20
 
       - name: Verify committed logs (no APK/SO in repo)
