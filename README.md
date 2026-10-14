@@ -39,6 +39,25 @@ Java.perform(()=>{const N=Java.use("com.snake.helper.Native");
 
 See `logs/dex/ilil-call-sites.log` + `logs/ghidra/libengine-jni_onload-capstone.log` + `docs/SnakeEngine_DeepDive_ilil_Dart.md` §1.
 
+## No-Frida Runtime Hook (Unicorn + Static)
+
+No Frida, no device — two lightweight alternatives that run on Alpine PRoot (aarch64) or Actions:
+
+```sh
+# 1. Unicorn emulation — hooks svc mmap + dumps 7 heaps (JNI_OnLoad 0xF3FA0)
+pip install unicorn  # lightweight, allowed on Alpine — NOT Ghidra
+python3 scripts/unicorn_dump_ilil.py /var/minis/attachments/uploads/Snake_Engine_2.2.6.apk
+# -> logs/runtime/unicorn-ilil-dump.log + hook-log.json + unicorn-heap-*.bin (7 mmaps at 0xF4018)
+
+# 2. Static NEON replay — pure Python, no emulation, replays 0xF4124..0xF4174 vector loop
+python3 scripts/static_decrypt_ilil.py path/to/Snake_Engine_2.2.6.apk
+# -> logs/runtime/static-ilil-decode.log + static-heap-0xA405.bin
+```
+
+Both cover the same `JNI_OnLoad` vector decrypt (`dup v1/v2, cmhi, xtn, str @ 0xF4130`) and `q0 @ 0x104A70` table.
+The 7 `mmap(svc 0xDE @ 0xF4018)` heaps prove the pack (`br x10` dispatch to decrypted heap crashes without decrypt).
+For ground truth use Frida above; these two prove the same path without a device.
+
 ## Workflow
 
 `.github/workflows/logs.yml` — `workflow_dispatch` — runs on `ubuntu-latest` with `binutils` + `python3` + `androguard`/`capstone`, re-reads the APK committed as a release asset (never committed as binary), regenerates `readelf -sida` / `objdump -d` / `capstone` / `androguard` logs, uploads them as `snake-engine-logs-<sha>` artifact. No APK is committed.

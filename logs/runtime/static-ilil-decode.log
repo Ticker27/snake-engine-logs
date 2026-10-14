@@ -1,0 +1,139 @@
+# Static NEON Replay — Snake Engine libengine.so (No Frida, No Unicorn)
+# SO: /tmp/tmpi4owq1fu/lib/arm64-v8a/libengine.so
+# JNI 0xf3fa0 size 12388, RODATA file 0x10a50 size 0x32d64, q0 file 0x10a70 = 00000000000000000100000000000000
+# X19=0xa40501a403480122 (0x122|0x348|0x1A4|0xA405 ladder), X20=0x520280d201a40091 (0x91|0x1A4|0x80D2|0x5202)
+# X11 dup=0xa9 X12 dup=2 (from mov w11/w12 @ 0xF40EC)
+# Vector loop: 0x550/0x10 = 85 iters, heap_writes=169
+# svc pcs: 0xf4018, 0xf411c, 0xf4428, 0xf4458, 0xf47cc, 0xf48d4, 0xf4be4, 0xf4c04, 0xf4c50, 0xf4d58, 0xf5068, 0xf5088, 0xf50d4, 0xf51dc, 0xf54ec, 0xf550c, 0xf5558, 0xf5660, 0xf595c, 0xf597c, 0xf59c8, 0xf5aec, 0xf5dd0, 0xf5df0, 0xf5e3c, 0xf5f60, 0xf6244, 0xf6264, 0xf62b0, 0xf63d4, 0xf66b8, 0xf66d8, 0xf6724, 0xf6848, 0xf6b2c, 0xf6b4c, 0xf6b98, 0xf6cc8, 0xf6fa0, 0xf6fc0
+# blr pcs: 0xf40e0, 0xf43f4, 0xf4880, 0xf4b5c, 0xf4d04, 0xf4fe0, 0xf5188, 0xf5464, 0xf560c, 0xf58e8, 0xf5a70, 0xf5d84, 0xf5ee4, 0xf61f8, 0xf6358, 0xf666c, 0xf67cc, 0xf6ae0, 0xf6c40, 0xf6f64
+
+[heap dump] -> logs/runtime/static-heap-0xA405.bin (0x800 bytes)
+hex_head: 00000000000000009100a401d280025222014803a40105a4b301ec04768207f64402900648030a48d50234081a840c9a6603d809ec040fecf7037c0bbe85113e
+nonzero bytes: 1339/2048
+
+[heap writes (offset -> value) sample 20]
+  +0x000: 0x0000000000000000
+  +0x008: 0x520280d201a40091
+  +0x010: 0xa40501a403480122
+  +0x018: 0xf607827604ec01b3
+  +0x020: 0x480a034806900244
+  +0x028: 0x9a0c841a083402d5
+  +0x030: 0xec0f04ec09d80366
+  +0x038: 0x3e1185be0b7c03f7
+  +0x040: 0x901406900d200488
+  +0x048: 0xe21687620ec40519
+  +0x050: 0x34190834106805aa
+  +0x058: 0x861b8906120c063b
+  +0x060: 0xd81e09d813b006cc
+  +0x068: 0x2a208aaa1554075d
+  +0x070: 0x7c230b7c16f807ee
+  +0x078: 0xce258c4e189c087f
+  +0x080: 0x20280d201a400910
+  +0x088: 0x722a8df21be409a1
+  +0x090: 0xc42d0ec41d880a32
+  +0x098: 0x162f8f961f2c0ac3
+
+[heap strings] 21 found
+  @0x153: Dt"it[
+  @0x183: N`'x`
+  @0x1e1: !pb81
+  @0x210: b%Hl$6
+  @0x237: l7(|t>
+  @0x269: +T~*
+  @0x27f: NP-@
+  @0x347: Qy;D
+  @0x35f: G,=0
+  @0x3a4: (_")EB
+  @0x3c4: pb,q
+  @0x3de: 3g<Fp
+  @0x3f4: \g;]
+  @0x424: HlJIUK4
+  @0x454: 4qY5
+  @0x46e: `+nP
+  @0x474: |tc}
+  @0x484:  vh!!R
+  @0x4a4: hyrieTt
+  @0x4ef: K~Y8
+  @0x507: A1[$
+
+[rodata strings sample 20/0]
+
+[movk ladder raw]
+  000f4178: adrp x9, #0x828000
+  000f417c: adrp x10, #0x828000
+  000f4180: mov x13, #0x80d2
+  000f4184: adrp x22, #0x828000
+  000f4188: movk x13, #0xe31f, lsl #16
+  000f418c: adrp x21, #0x828000
+  000f4194: movk x13, #0xd1, lsl #32
+  000f4198: mov x12, #0x702
+  000f419c: mov x4, #0x94
+  000f41a4: movk x13, #0x2240, lsl #48
+  000f41a8: movk x12, #0xa850, lsl #16
+  000f41ac: movk x4, #0xd105, lsl #16
+  000f41b0: mov x14, #0x51d5
+  000f41b4: movk x12, #0xe038, lsl #32
+  000f41c0: movk x4, #0xaa, lsl #32
+  000f41c4: mov x5, #0x9bd2
+  000f41c8: movk x14, #0x4381, lsl #16
+  000f41d0: movk x12, #0x452d, lsl #48
+  000f41d4: mov x3, #0x9a9
+  000f41d8: movk x4, #0xf403, lsl #48
+  000f41dc: movk x5, #0xa9d5, lsl #16
+  000f41e0: movk x14, #0x5ae, lsl #32
+  000f41e8: movk x3, #0xfd7b, lsl #16
+  000f41ec: movk x5, #0xd1d3, lsl #32
+  000f41f0: mov x15, #0xff97
+  000f41f4: movk x14, #0xdf22, lsl #48
+  000f4200: movk x3, #0x8a9, lsl #32
+  000f4204: movk x5, #0xeb03, lsl #48
+  000f4208: movk x15, #0x75fc, lsl #16
+  000f420c: mov x16, #0x2d1
+  000f4214: adrp x24, #0x828000
+  000f4218: mov x1, #0xb94
+  000f421c: movk x3, #0xf44f, lsl #48
+  000f4220: movk x15, #0x14aa, lsl #32
+  000f4224: movk x16, #0xff83, lsl #16
+  000f4230: movk x1, #0x77fb, lsl #16
+  000f4234: movk x15, #0xe003, lsl #48
+  000f4238: movk x16, #0xc94, lsl #32
+  000f423c: mov x7, #0x13aa
+  000f4248: movk x1, #0x139, lsl #32
+  000f424c: mov x2, #0x50b5
+  000f4250: movk x16, #0xc4f2, lsl #48
+  000f4254: movk x7, #0xe003, lsl #16
+  000f4264: movk x1, #0xff7f, lsl #48
+  000f4268: mov x0, #0x1a9
+  000f426c: movk x2, #0xe6e8, lsl #16
+  000f4270: movk x7, #0x91, lsl #32
+  000f427c: movk x0, #0xf54f, lsl #16
+  000f4280: movk x2, #0xfe97, lsl #32
+  000f4284: movk x7, #0x94c2, lsl #48
+  000f4288: mov x25, #0x13aa
+  000f4294: movk x0, #0x1faa, lsl #32
+  000f4298: movk x2, #0xe6ed, lsl #48
+  000f429c: mov x6, #0x7ed3
+  000f42a0: movk x25, #0xe303, lsl #16
+  000f42ac: movk x0, #0xf603, lsl #48
+  000f42b0: movk x6, #0xc7f4, lsl #16
+  000f42b4: movk x25, #0x8052, lsl #32
+  000f42c0: movk x6, #0xe8ca, lsl #32
+  000f42c4: movk x25, #0x108, lsl #48
+  000f42d0: mov x0, #0xa9
+  000f42d4: mov x17, #0x40b9
+  000f42d8: movk x6, #0xa6e6, lsl #48
+  000f42e4: movk x0, #0xff7f, lsl #16
+  000f42e8: movk x17, #0xb42a, lsl #16
+  000f42f4: movk x0, #0x15aa, lsl #32
+  000f42f8: movk x17, #0xd17, lsl #32
+  000f42fc: movk x0, #0xe103, lsl #48
+
+[ilil F1/F2/F3 hypothesis]
+  Keys: 0xF11301(F1/0x1301), 0xF11501(F1/0x1501), 0xF21501(F2/0x1501), 0xF31501(F3/0x1501), 0xF11520/21
+  Low 0x1501 reused across F1/F2/F3 -> high byte selects table, low=offset inside decrypted heap
+  To map low->string: read heap at (table_base + low*stride) after full loop, decode as UTF string
+  This static replay gives heap layout; final string = heap[table_base + low] -> strlen -> UTF
+
+[note] Best-effort static replay — lane semantics (cmhi 128-bit) are approximated.
+  For ground-truth plaintext, run: python3 scripts/unicorn_dump_ilil.py  (svc hook proves heap)
+  Or on device: frida -U -f com.snake -l scripts/frida/dump_ilil.js

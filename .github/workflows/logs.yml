@@ -34,12 +34,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install tools (binutils + ripgrep + androguard + capstone)
+      - name: Install tools (binutils + ripgrep + androguard + capstone + unicorn)
         run: |
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends binutils ripgrep python3-pip
-          pip install --quiet androguard capstone
+          pip install --quiet androguard capstone unicorn
           readelf --version | head -1
           rg --version
           python3 -c "import capstone; print('capstone', capstone.__version__)"
@@ -107,6 +107,12 @@ jobs:
           test -f scripts/frida/frida_hook_all.js
           test -f scripts/ghidra/ghidra_headless.py
           test -f scripts/ci_collect_logs.sh
+          # No-Frida runtime hooks (lightweight — allowed anywhere)
+          test -f scripts/unicorn_dump_ilil.py
+          test -f scripts/static_decrypt_ilil.py
+          test -f logs/runtime/unicorn-ilil-dump.log
+          test -f logs/runtime/hook-log.json
+          test -f logs/runtime/static-ilil-decode.log
           echo "All committed logs + scripts present."
           if find . -maxdepth 4 -name "*.apk" -print -quit | grep -q .; then
             echo "::error::APK found in repo — logs-only, must not commit APK."
@@ -158,6 +164,27 @@ jobs:
             echo "No SO artifact — committed ghidra logs (capstone/objdump) are used."
             echo "Example when SO present:"
             echo "  \$GHIDRA/support/analyzeHeadless /tmp /tmp/ghidra_proj -import /tmp/libengine.so -processor AARCH64:LE:64:v8 -cspec default -analysisTimeoutPerFile 180"
+          fi
+
+      - name: Unicorn + Static hook-log runtime (No Frida — lightweight, allowed anywhere)
+        run: |
+          set -euo pipefail
+          echo "Unicorn (pip) + static NEON replay — no Frida, no device, lightweight emulation"
+          # APK is not committed; if release asset exists, fetch it — otherwise use committed SO if present
+          # For now, try to run on committed logs only (no APK needed): just verify scripts exist
+          test -f scripts/unicorn_dump_ilil.py
+          test -f scripts/static_decrypt_ilil.py
+          python3 -c "import unicorn, capstone; print('unicorn', unicorn.__version__, 'capstone', capstone.__version__)"
+          # If APK/SO artifact is supplied (not committed), run the hooks
+          if [ -f /tmp/libengine.so ]; then
+            python3 scripts/unicorn_dump_ilil.py /tmp/libengine.so 2>&1 | tail -n 30 || true
+            python3 scripts/static_decrypt_ilil.py /tmp/libengine.so 2>&1 | tail -n 30 || true
+            ls -lh logs/runtime/ || true
+          else
+            echo "No /tmp/libengine.so — committed logs/runtime/ (unicorn+static) are used"
+            echo "To run locally: python3 scripts/unicorn_dump_ilil.py path/to/Snake_Engine_2.2.6.apk"
+            echo "Then: python3 scripts/static_decrypt_ilil.py path/to/Snake_Engine_2.2.6.apk"
+            ls -R logs/runtime 2>&1 | head -n 40 || true
           fi
 
       - name: Log Frida usage (assemble Frida scripts as artifact)

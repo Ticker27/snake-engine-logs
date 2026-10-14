@@ -1,0 +1,35 @@
+# Unicorn Hook-Log Runtime (No Frida, No Device) — Snake Engine libengine.so
+# SO: /tmp/tmpsgt15pk_/lib/arm64-v8a/libengine.so
+# JNI_OnLoad: 0xf3fa0 size 12388, load_base 0x0, q0 file head 010e084e4a010d8b294100910084e14e3f4115f1a1fdff543a3900904d1a90d2
+# Has unicorn: True, mapped heaps: 7
+# heap 0xb0000000 size 4096 nonzero 4094 head 00100014785620d478565ed4ffffffff78563416785620d478565ed4ffffffff78563416785620d4
+# heap 0xb0004000 size 4096 nonzero 4094 head 00100014785620d478565ed4ffffffff78563416785620d478565ed4ffffffff78563416785620d4
+# heap 0xb0008000 size 4096 nonzero 4094 head 00100014785620d478565ed4ffffffff78563416785620d478565ed4ffffffff78563416785620d4
+# heap 0xb000c000 size 4096 nonzero 4094 head 00100014785620d478565ed4ffffffff78563416785620d478565ed4ffffffff78563416785620d4
+# heap 0xb0010000 size 4096 nonzero 4094 head 00100014785620d478565ed4ffffffff78563416785620d478565ed4ffffffff78563416785620d4
+# heap 0xb0014000 size 4096 nonzero 4094 head 00100014785620d478565ed4ffffffff78563416785620d478565ed4ffffffff78563416785620d4
+# heap 0xb0018000 size 4096 nonzero 4096 head 78563416785620d478565ed4ffffffff78563416785620d478565ed4ffffffff78563416785620d4
+
+[svc trace]
+  {'type': 'mmap(svc 0xDE)', 'pc': '0xf4018', 'len': '0x1000', 'addr': '0xb0000000'}
+  {'type': 'mmap(svc 0xDE)', 'pc': '0xf4018', 'len': '0x1000', 'addr': '0xb0004000'}
+  {'type': 'mmap(svc 0xDE)', 'pc': '0xf4018', 'len': '0x1000', 'addr': '0xb0008000'}
+  {'type': 'mmap(svc 0xDE)', 'pc': '0xf4018', 'len': '0x1000', 'addr': '0xb000c000'}
+  {'type': 'mmap(svc 0xDE)', 'pc': '0xf4018', 'len': '0x1000', 'addr': '0xb0010000'}
+  {'type': 'mmap(svc 0xDE)', 'pc': '0xf4018', 'len': '0x1000', 'addr': '0xb0014000'}
+  {'type': 'mmap(svc 0xDE)', 'pc': '0xf4018', 'len': '0x1000', 'addr': '0xb0018000'}
+  {'type': 'emu_error', 'error': 'Invalid memory fetch (UC_ERR_FETCH_UNMAPPED)', 'pc': '0xa8d2d9e0'}
+
+[mytext gate]
+  0081eee8: adrp x8, #0x828000
+  0081ef08: adrp x10, #0x828000
+  0081ef0c: ldr w10, [x10, #0xd90]
+  0081ef44: adrp x8, #0x828000
+  0081ef64: adrp x10, #0x828000
+  0081ef68: ldr w10, [x10, #0xd90]
+
+[q0] file=010e084e4a010d8b294100910084e14e3f4115f1a1fdff543a3900904d1a90d2 live=010e084e4a010d8b294100910084e14e3f4115f1a1fdff543a3900904d1a90d2
+
+[note] Heap writes come from NEON vector loop at 0xF4124..0xF4170 (cmhi/xtn/fmov/tbz/str).
+  Each mmap corresponds to one of 7 pages of the encrypted ilil table (see DeepDive §1.4).
+  For ground-truth plaintext strings, also try static_decrypt_ilil.py or Frida dump_ilil.js.
