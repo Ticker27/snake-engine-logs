@@ -55,11 +55,13 @@ open("$ROOT/logs/ghidra/libengine-objdump-d.log","w").write("\n".join(lines[i] f
 print(f"objdump trimmed: {len(lines)} -> {len(keep)} lines")
 PY
 echo "capstone ..."
-python3 - <<PY
+export SNAKE_SO="$SO_ENGINE"
+python3 - <<'PY'
+import os
 from capstone import Cs, CS_ARCH_ARM64, CS_MODE_ARM
 cs=Cs(CS_ARCH_ARM64, CS_MODE_ARM)
-data=open("$SO_ENGINE","rb").read()
-for name,off,size in [("libengine-jni_onload-capstone",0xF3FA0,800),("libengine-mytext-capstone",0x81EEAC,0xF4),("libengine-b01c4-capstone",0xB01C4,200),("libengine-b134c-capstone",0xB134C,200)]:
+data=open(os.environ.get("SNAKE_SO","") or "$SO_ENGINE","rb").read()
+for name,off,size in [("libengine-jni_onload-capstone",0xF3FA0,12388),("libengine-mytext-capstone",0x81EEAC,0xF4),("libengine-b01c4-capstone",0xB01C4,4480),("libengine-b134c-capstone",0xB134C,4460)]:
     chunk=data[off:off+size]
     open(f"$ROOT/logs/ghidra/{name}.log","w").write("\n".join(f"  {ins.address:08x}: {ins.mnemonic:12s} {ins.op_str}" for ins in cs.disasm(chunk, off)))
 print("capstone done")
