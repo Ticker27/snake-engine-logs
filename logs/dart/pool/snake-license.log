@@ -1,0 +1,126 @@
+Access Token
+Add Device
+Anda tidak disambungkan ke internet, Snake Engine memerlukan sambungan internet yang aktif
+Ang Inyong Seller ID :
+Ang Iyong Access Token
+Ang device na ito ay maaaring mag-access sa seller login. Mangyaring mag-login sa iyong account.
+Ang device na sinusubukan mong i-activate ay BANNED
+Ang larong ito ay hindi naka-install sa iyong device. mangyaring i-install ito mula sa Google Play muna.
+Ang subscription na ito ay para sa isang device lamang
+Ang subscription ng device na ito ay naka-link mula sa ibang device (*)
+Ang target device ay mayroon nang aktibong subscription, mangyaring gumamit ng ibang device ID
+Attention, If you convert the current subscription you will get * of # subscription
+Attention, Lock the key will make it only work for this device id (*) and not others.
+Attention, convert to key will generate a CODE that will only work for this device id (*) and not others.
+Babala, Kung ico-convert mo ang kasalukuyang subscription makakakuha ka ng * ng subscription #
+Babala, ang pag-convert sa key ay gagawa ng CODE na gagana lamang para sa device ID na ito (*) at hindi sa iba.
+Babala, ang pag-lock ng key ay gagawing gumana lamang ito para sa device ID na ito (*) at hindi sa iba.
+Copiar Token
+Copy Token
+Device
+Device ID:
+Device id:
+Device removed
+Device was not found
+Enter Other device id
+Enter device id
+Error sa Pag-login.
+Este es tu token de acceso seguro. Mant
+Facebook Login Method
+Get Subscription
+Global Seller
+Hindi ka konektado sa internet, kailangan ng Snake Engine ng aktibong koneksyon sa internet
+Hindi nahanap ang Device ID, mangyaring suriin ito
+Hindi nahanap ang device
+I-enter ang device ID
+I-tap para mag-logout sa iyong seller account
+Ini adalah token akses selamat anda. Simpan dengan selamat dan jangan kongsikan dengan orang lain.
+Ito ang inyong secure access token. Panatilihin itong ligtas at huwag ibahagi sa iba.
+KeyEventDeviceType.
+Kopyahin ang Token
+Kumuha ng Subscription
+Login
+Login Error.
+Login only for sellers
+Login para sa mga seller lamang
+Mabubura nito ang lahat ng iyong naka-save na data at kailangan mong mag-login muli.
+Mag-login
+Magdagdag ng Device
+Maglagay ng Ibang device ID
+Mangyaring i-enter ang buong device ID.
+Mangyaring i-restart ang app upang mai-load ang subscription
+Matagumpay na nakopya ang inyong seller ID
+Matagumpay na nakopya ang iyong device ID
+Matagumpay na nakopya ang token
+Mga Nakabahaging Device:
+Mga Opisyal na Seller
+NOTE: ALL OTHER DEVICES WILL BE REMOVED
+Na-convert ang subscription
+Naabot mo na ang limitasyon ng mga device na maaari mong idagdag
+Naidagdag na ang device na ito
+No Features are listed for this subscription
+No token available
+Official Seller
+Official Sellers
+Opisyal na Seller
+PAALALA: LAHAT NG IBANG DEVICE AY TATANGGALIN
+Pagpili ng Subscription
+Pastel tokens, low chroma palettes (32).
+PlatformConfigurationNativeApi::GetRootIsolateToken
+Please Enter the full device id.
+Please restart the app to load the subscription
+PointerDeviceKind.
+Salin Token
+Seller Alert!
+Shared Devices:
+Snake Engine
+Subscription
+Subscription Selection
+Subscription converted
+Subscription passed to TLS upgrade is paused
+Successfully copied your seller ID
+Tap the eye icon above to show the token
+Tap to logout from your seller account
+The Device ID was not found, please check it
+The device you try to activate is BANNED
+The target device already has an active subscription, please use another device ID
+This device can have access to seller login. Please login to your account.
+This device is already added
+This device subscription is linked from other device (*)
+This game is not Installed on your device . please install it from Google Play first .
+This is your secure access token. Keep it safe and do not share it with others.
+This subscription is for a single device only
+This will clear all your saved data and you'll need to login again.
+Tinanggal ang device
+Token Akses
+Token Akses Anda
+Token berjaya disalin
+Token copiado exitosamente
+Token copied successfully
+Token de Acceso
+Token[
+Tokens and palettes match source color.
+Tu Token de Acceso
+Wala kaming opisyal na seller sa bansang ito.
+Wala kang aktibong subscription para sa larong ito.
+Walang mga feature na nakalista para sa subscription na ito
+We don't have any official sellers in this country.
+You are not connected to the internet, Snake Engine needs an active internet connection
+You don't have any active subscription for this game.
+You reached the limit of devices that you can add
+Your Access Token
+Your Seller Id :
+Your device id was copied successfully
+_BufferingStreamSubscription@4048458
+_ControllerSubscription@4048458
+com.snake
+decompressLicenses
+device
+deviceId
+devicePixelRatio
+fb_login_method
+https://rest.snakeseller.com/api/request/
+https://www.snakeengine.com/topup/
+parseLicenses
+s conectado a Internet, Snake Engine necesita una conexi
+utf8DecodeLicenses

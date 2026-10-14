@@ -1,0 +1,41 @@
+
+Elf file type is DYN (Shared object file)
+Entry point 0x0
+There are 10 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  PHDR           0x0000000000000040 0x0000000000000040 0x0000000000000040
+                 0x0000000000000230 0x0000000000000230  R      0x8
+  LOAD           0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x000000000042d654 0x000000000042d654  R      0x10000
+  LOAD           0x000000000042d680 0x000000000043d680 0x000000000043d680
+                 0x00000000005a2cd0 0x00000000005a2cd0  R E    0x10000
+  LOAD           0x00000000009d0350 0x00000000009f0350 0x00000000009f0350
+                 0x0000000000062f10 0x0000000000063cb0  RW     0x10000
+  LOAD           0x0000000000a33260 0x0000000000a63260 0x0000000000a63260
+                 0x0000000000004388 0x0000000000010b98  RW     0x10000
+  DYNAMIC        0x0000000000a320f0 0x0000000000a520f0 0x0000000000a520f0
+                 0x0000000000000210 0x0000000000000210  RW     0x8
+  GNU_RELRO      0x00000000009d0350 0x00000000009f0350 0x00000000009f0350
+                 0x0000000000062f10 0x0000000000063cb0  R      0x1
+  GNU_EH_FRAME   0x00000000002da104 0x00000000002da104 0x00000000002da104
+                 0x0000000000050bec 0x0000000000050bec  R      0x4
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000000000000  RW     0x0
+  NOTE           0x0000000000000270 0x0000000000000270 0x0000000000000270
+                 0x00000000000000bc 0x00000000000000bc  R      0x4
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     
+   01     .note.android.ident .note.gnu.build-id .dynsym .gnu.version .gnu.version_r .gnu.hash .hash .dynstr .rela.dyn .rela.plt .rodata .eh_frame_hdr .eh_frame 
+   02     .text .plt 
+   03     .data.rel.ro .fini_array .init_array .dynamic .got .got.plt .relro_padding 
+   04     .data .bss 
+   05     .dynamic 
+   06     .data.rel.ro .fini_array .init_array .dynamic .got .got.plt .relro_padding 
+   07     .eh_frame_hdr 
+   08     
+   09     .note.android.ident .note.gnu.build-id 

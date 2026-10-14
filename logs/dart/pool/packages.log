@@ -1,0 +1,11 @@
+dart:_http
+dart:async-patch
+dart:convert
+dart:io
+dart:math
+dart:ui
+dart:vmservice_io
+package:ffi/src/allocation.dart
+package:flutter/src/services/message_codec.dart
+package:flutter/src/services/platform_channel.dart
+package:stack_trace

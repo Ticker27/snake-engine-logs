@@ -1,6 +1,3 @@
-*.apk
-*.so
-*.dex
-*.prof
-*.profm
-*.log
+/*.apk
+/*.so
+androguard.log
