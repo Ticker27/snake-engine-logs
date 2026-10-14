@@ -45,21 +45,21 @@ jobs:
           python3 -c "import capstone; print('capstone', capstone.__version__)"
 
       - name: Set up Java 21 (Ghidra requires JDK 21+)
-        if: ${{ inputs.run_ghidra != false }}
+        if: ${{ github.event_name == 'push' || inputs.run_ghidra }}
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "21"
 
       - name: Cache Ghidra
-        if: ${{ inputs.run_ghidra != false }}
+        if: ${{ github.event_name == 'push' || inputs.run_ghidra }}
         uses: actions/cache@v4
         with:
           path: /tmp/ghidra
           key: ghidra-11.3.2-20250401
 
       - name: Download Ghidra (heavy — Actions only, never Alpine PRoot)
-        if: ${{ inputs.run_ghidra != false }}
+        if: ${{ github.event_name == 'push' || inputs.run_ghidra }}
         run: |
           set -euo pipefail
           if [ -d /tmp/ghidra/ghidra_11.3.2_PUBLIC ]; then
@@ -110,7 +110,7 @@ jobs:
           head -20 logs/ghidra/libengine-mytext-capstone.log || true
 
       - name: Ghidra headless (optional — when SO available as workflow artifact)
-        if: ${{ inputs.run_ghidra != false }}
+        if: ${{ github.event_name == 'push' || inputs.run_ghidra }}
         run: |
           set -euo pipefail
           GHIDRA="/tmp/ghidra/ghidra_11.3.2_PUBLIC"
@@ -126,7 +126,7 @@ jobs:
           echo "  \$GHIDRA/support/analyzeHeadless /tmp /tmp/ghidra_proj -import /tmp/libengine.so -processor AARCH64:LE:64:v8 -cspec default -analysisTimeoutPerFile 120 -postScript"
 
       - name: Upload logs artifact (assemble only)
-        if: ${{ inputs.upload_artifact != false }}
+        if: ${{ github.event_name == 'push' || inputs.upload_artifact }}
         uses: actions/upload-artifact@v4
         with:
           name: snake-engine-logs-${{ github.sha }}
