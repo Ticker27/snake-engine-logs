@@ -7,7 +7,7 @@ APK="${1:-}"
 if [ -z "$APK" ]; then echo "Usage: $0 <apk>" >&2; exit 1; fi
 if [ ! -f "$APK" ]; then echo "APK not found: $APK" >&2; exit 1; fi
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-TMPDIR="$(mktemp -d)"
+TMPDIR="$(TMPDIR=/tmp mktemp -d)"
 trap 'rm -rf "$TMPDIR"' EXIT
 echo "Unzipping $APK ..."
 unzip -q "$APK" -d "$TMPDIR/unzipped"
