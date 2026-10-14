@@ -1,0 +1,146 @@
+# หลักฐานดิบจาก classes.dex — path/conf/provider table (Snake Engine 2.2.6)
+
+## path table (data/user, data/user_de, /data/data, /sdcard, storage)  (@0x2d9d95)
+```
+results!
+.xml
+.zip
+/base.apk
+/cmdline
+/data/data/%s
+/data/data/%s/lib
+/data/local/bin/su
+/data/local/bin/su-fake
+/data/local/su
+/data/local/su-fake
+/data/local/xbin/su
+/data/local/xbin/su-fake
+/data/misc/profiles/cur/0
+/data/misc/profiles/cur/0/
+/data/misc/profiles/ref/
+/data/user/%d/%s
+/data/user/%d/%s/lib
+/data/user_de/%d/%s
+/data/user_de/%d/%s/lib
+/proc/
+/proc/self/
+/raw/
+/root/
+/sbin/su
+/sbin/su-fake
+/sdcard
+/sdcard/%s
+/sdcard/Pictures
+/storage/emulated/%d
+/storage/emulated/%d/%s
+/storage/emulated/%d/Pictures
+/su/bin/su
+/su/bin/su-fake
+/system/app/Superuser.apk
+/system/app/Superuser.apk-fake
+/system/bin/failsafe/su
+/system/bin/failsafe/su-fake
+/system/bin/su
+/system/bin/su-fake
+1/system/framework/org.apache.http.legacy.boot.jar
+,/system/framework/org.apache.http.legacy.jar
+/system/sd/xbin/su
+```
+
+## conf names group A (shared-user.conf / user.conf)  (@0x35c917)
+```
+m feature flag enabled.
+ sgtm upload enabled in manifest.
+sgtm_upload_enabled
+shared-user.conf
+sharedElementFirstOutViews
+sharedElementLastInViews
+sharedElementNameMapping
+sharedElementNameMapping.keys
+sharedElementNameMapping.values
+sharedElements
+sharedLibraryFiles
+```
+
+## conf names group B (uid.conf)  (@0x35e20a)
+```
+type=?
+typesIterator
+tz-offset
+uiMode
+uid.conf
++unRegisterPackageSettingStateChangeListener
+$unRegisterSuperResolutionStateChange
+unable to connect to service: 
+unable to create JSONObject: 
+5unable to rename the tmpfile to Persist
+```
+
+## accounts.conf  (@0x339153)
+```
+ot be null
+accountType is null
+account_manager
+accounts
+accounts.conf
+acknowledgeStartMessage
+acknowledgeStopMessage
+aclid
+acquire
+acquireContentProviderClient
+acquireLatestImage
+$acquireUnstableContentProviderClient
+acquireWakeLock
+acquireWakeLockWithUid
+action
+```
+
+## fake-location.conf  (@0x3437e4)
+```
+iled_resolution
+failed_status
+failing_client_id
+failure
+fake-location.conf
+false
+familyName
+fcm-
+!fcm_fallback_notification_channel
+'fcm_fallback_notification_channel_label
+fcm_integration
+fdl_integration
+feature
+feature.rect
+featureBounds
+featureGroups
+```
+
+## provider / root-app hijack table (miniclip etc.)  (@0x3401c6)
+```
+'com.google.protobuf.ExtensionSchemaFull
+4com.google.protobuf.GeneratedExtensionRegistryLoader
+$com.google.protobuf.GeneratedMessage
+&com.google.protobuf.MapFieldSchemaFull
+)com.google.protobuf.NewInstanceSchemaFull
+)com.google.protobuf.UnknownFieldSetSchema
+com.google.protobuf.UnsafeUtil
+com.huawei.webview
+4com.ironsource.lifecycle.IronsourceLifecycleProvider
+;com.ironsource.lifecycle.LevelPlayActivityLifecycleProvider
+com.koushikdutta.superuser
+com.labpixies.flood,
+6com.miniclip.madsandroidsdk.config.MAdsContentProvider
+5com.miniclip.madsandroidsdk.utils.MAdsContentProvider
+com.miui.catcherpatch
+com.miui.contentcatcher
+com.miui.gallery
+,com.mobilefuse.sdk.MobileFuseSdkInitProvider
+com.noshufou.android.su
+com.noshufou.android.su.elite
+=com.smaato.sdk.core.lifecycle.ProcessLifecycleOwnerInitialize
+>com.smaato.sdk.core.lifecycle.ProcessLifecycleOwnerInitializer
+"com.snake.INTERNAL_OAUTH_CANCELLED
+com.snake.INTERNAL_OAUTH_RESULT
+"com.s
+```
+

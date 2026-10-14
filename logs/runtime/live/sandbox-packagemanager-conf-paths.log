@@ -1,0 +1,87 @@
+# Snake Engine 2.2.6 — Sandbox PackageManager: conf files, path mapping, PathClassLoader, virtual UI
+
+เป้าหมายอ้างอิง: **`com.miniclip.eightballpool` (8 Ball Pool — Miniclip)**
+(ยืนยันจาก: แบนเนอร์ C2 `SNAKE ENGINE — 8 BALL POOL` ที่แคชไว้ + สตริง provider ของ Miniclip ใน DEX)
+
+## 1) ไฟล์ conf ทั้ง 6 — พบครบใน `classes.dex`
+
+| ไฟล์ | offset | หน้าที่ (VirtualApp/VA-style) | เนื้อหาที่คาดว่าจะเจอ |
+|---|---|---|---|
+| `package.conf` | `0x354421` | serialize `PackageSetting` ของ **ทุกเกสต์ที่ติดตั้ง** | apkPath, libPath, uid, `BPackageUserState` (installed/stopped/hidden/**launched**) |
+| `uid.conf` | `0x35e20a` | ตาราง **alloc UID ของเกสต์** (package → uid ปลอม) | uid, sharedUserId, appId |
+| `shared-user.conf` | `0x35c917` | กลุ่ม **`android:sharedUserId`** ที่ถูกเสมือน | sharedUser list, uid, signature |
+| `user.conf` | `0x35c91e`, `0x35e953` | รายการ **virtual user** (multi-user emulation) | userId, flags, serial |
+| `accounts.conf` | `0x339153` | **AccountManager เสมือน** (เกมไม่เห็นบัญชีจริง) | account records ต่อเกสต์ |
+| `fake-location.conf` | `0x3437e4` | **พิกัด GPS ปลอม** ต่อเกสต์ | lat/lon/accuracy ที่ป้อนให้เป้าหมาย |
+
+เขียน/อ่านใต้ sandbox root: `/data/user/0/com.snake/root/data/system/<ไฟล์>` (ปัจจุบันยัง **ว่าง** — ยังไม่มีเกสต์ติดตั้ง)
+
+## 2) Path mapping ที่พบบันทึกไว้ใน DEX (verbatim)
+
+```
+/base.apk                                   ← ชื่อไฟล์ APK ของเกสต์ใน data/app/<pkg>/
+/data/data/%s          /data/data/%s/lib     ← alias แบบเดิม (ก่อน Android 4.2)
+/data/user/%d/%s       /data/user/%d/%s/lib  ← %d = virtual userId, %s = packageName  (credential-encrypted)
+/data/user_de/%d/%s    /data/user_de/%d/%s/lib ← device-encrypted variant (Android 7+)
+/data/misc/profiles/cur/0     /data/misc/profiles/ref/  ← profile redirection (ART)
+/sdcard/%s     /storage/emulated/%d     /storage/emulated/%d/%s   /storage/emulated/%d/Pictures
+/sdcard   /root/   /proc/self/   /proc/
+```
+**Mapping จริง**: เกสต์เห็น `/data/user/0/com.miniclip.eightballpool` แต่โฮสต์เก็บจริงที่
+`/data/user/0/com.snake/root/data/user/0/com.miniclip.eightballpool`
+(และ **native lib ของเกสต์** แยกไปที่ `.../%s/lib` ← ตัวที่ถูกส่งเข้า `PathClassLoader`)
+
+**Root-hiding (สำคัญกับเกมที่มี anti-root):** DEX มีคู่ path ปลอม
+`/system/bin/su` ↔ `/system/bin/su-fake`, `/system/xbin/su-fake`, `/sbin/su-fake`, `/data/local/bin/su-fake`,
+`/system/app/Superuser.apk-fake` ⇒ เวลารันเกสต์ จะรายงานว่า "ไม่มี su" (ตรงกับตาราง anti-root ที่ถอดได้จาก native:
+`/product/bin/su … /system/bin/su` 13 เส้นทาง)
+
+## 3) PathClassLoader + PackageManager (ลำดับการทำงาน)
+
+```
+1. ติดตั้ง (install gate):
+   Dart → Entry.C("G") → yu0.h().A(pkg, uid)        ตรวจสิทธิ์/สถานะ
+        → Entry.C("H") → s2.a()                     ติดตั้งลง sandbox
+        → เขียน PackageSetting ลง  root/data/system/package.conf (+ uid.conf)
+        → แตก base.apk เก็บที่      root/data/app/<pkg>/base.apk
+2. เตรียมไฟล์ระบบเกสต์:
+   root/data/system/{user.conf,shared-user.conf,accounts.conf,fake-location.conf}
+   root/data/user/<uid>/<pkg>/        (+ user_de, + /lib สำหรับ .so)
+3. โหลดคลาสของเกสต์:
+   PathClassLoader(
+        "<root>/data/app/com.miniclip.eightballpool/base.apk",
+        "<root>/data/user/0/com.miniclip.eightballpool/lib",
+        parent = host ClassLoader)
+   └─ APK นี้ถูกโหลดแบบ in-memory/PathClassLoader (ดู DexFind: DEX โหลดใน memory 99 ตัว)
+4. ตรวจสอบก่อนเปิด (launch gate):
+   อ่าน package.conf → BPackageUserState
+      ├─ installed == true ?
+      ├─ stopped / hidden == false ?
+      └─ launched = true (บันทึกการเปิดล่าสุด)
+   ผ่าน → ProxyActivity P0..P6 (:p0..:p6) → ActivityThread จริงของเกสต์
+   ไม่ผ่าน → บล็อก ไม่เปิด
+```
+
+## 4) Virtual UI: การผูกชื่อเป้าหมาย `com.miniclip.eightballpool`
+
+| ชั้น | ข้อมูล | หลักฐาน |
+|---|---|---|
+| C2 (Dart UI) | การ์ดเกม + ภาพโปรโมชันต่อเกม (8 Ball Pool) | แบนเนอร์ `c2-assets/snakeengine_banner_8ballpool_1536x861.jpg` |
+| Provider hijack list | `com.miniclip.madsandroidsdk.config.MAdsContentProvider`, `com.miniclip.madsandroidsdk.utils.MAdsContentProvider` | `classes.dex 0x3401c6 / 0x3401fe` |
+| Ad-SDK อื่นที่ต้องเสมือน | `com.vungle.ads.VungleProvider`, `com.ironsource.lifecycle.*`, `com.smaato.sdk.*`, `com.mobilefuse.sdk.*` | `classes.dex 0x33F800–0x340600` |
+| บัญชี/โซเชียลของเกม | `com.google.android.play.games`, `com.google.android.gsf`, `com.google.android.webview*` | ในบล็อกเดียวกัน |
+| โทเคน/ผลลัพธ์ภายในแอป | `com.snake.INTERNAL_OAUTH_RESULT`, `com.snake.snake_engine[.inner]` | บล็อกเดียวกัน |
+| ตัวเรียก UI กลาง | `Entry.C` code `"E"` = เปิด `InternalWebBrowser` (topup), `"G"/"H"` = install/launch | `logs/dex/full/entry-C-dispatcher.log` |
+
+⇒ **`com.miniclip.eightballpool` ถูกอ้างถึงผ่าน SDK ของมัน (MAdsContentProvider)** ซึ่งถูกเตรียมไว้ในตาราง
+provider-hijack แล้ว ⇒ sandbox โหลด 8 Ball Pool เข้ามาได้โดยไม่ต้องแก้ APK ของเกม (ผู้ใช้เลือกเกมจาก UI ที่ดึงจาก C2)
+
+## 5) ยังไม่ได้ (ต้องมีเกสต์ติดตั้งจริง 1 ตัว)
+
+1. ไฟล์ conf จริงทั้ง 6 (ปัจจุบัน `root/data/system` ว่าง) — ต้องติดตั้งก่อน แล้ว `cat root/data/system/*.conf`
+2. DEX ของ sandbox framework (`com.app.framework.core.system.pm.BPackageUserState`) — ยังไม่ถูกโหลด
+   (รัน `DexFind` ซ้ำหลังติดตั้ง)
+3. จุดที่เรียก `Native.chl/djp` ในเส้นทาง Install/Launch (อยู่ใน DEX นั้น)
+
+---
+*ไฟล์หลักฐานดิบ: `dex-path-conf-evidence.log` · `inmem-dex-map.log` · `c2-and-sandbox-targets.log`*
