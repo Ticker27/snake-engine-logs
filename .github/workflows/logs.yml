@@ -150,6 +150,8 @@ jobs:
           test -f logs/runtime/live/oldsnake-state/package.conf
           test -f logs/runtime/live/oldsnake-state/inventory.txt
           test -f logs/runtime/live/oldsnake-state/payload-metadata.txt
+          test -f logs/runtime/live/target-entry-and-version-mismatch.log
+          test -f logs/runtime/live/target-entry-schema.txt
           echo "All committed logs + scripts present."
           if find . -maxdepth 4 -name "*.apk" -print -quit | grep -q .; then
             echo "::error::APK found in repo — logs-only, must not commit APK."

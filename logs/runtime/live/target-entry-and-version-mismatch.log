@@ -1,0 +1,59 @@
+# Snake Engine — Target entry schema (สดจาก memory) + การไม่สอดคล้องกับ 56.32.0
+
+## 1) สถานะเกมบนเครื่อง (อัปเดตใหม่)
+
+```
+com.miniclip.eightballpool   versionName 56.32.0   versionCode 4050   (อัปเดต 2026-10-15 12:35)
+splits = [base, config.arm64_v8a]     ← ติดตั้งแบบ Play split (ไม่ใช่ single APK)
+base.apk                    156,380,028 B   sha256 83c24338fa2afdeb4f1ea5889eff515e04c5d9a28ad5a04e1afa8214dc840b55
+split_config.arm64_v8a.apk  108,459,945 B   sha256 1c15afcd0ab966948a7524636ba8db2dd76dd3a0bd3be3091cff313d4ae99bc7
+base+split (ต่อกัน)                         sha256 38325d77deb6e66b4cfb1894202905582c96123ed026612b4c4efca8bbd1f8c9
+md5(base) a1f1063ec91853da367b8810dceaacfe   sha1(base) e39e3d41b963d4571fb789a065baa4ea2b1f1b5a
+```
+
+## 2) Target entry ที่แอปถืออยู่ (คัดจาก Dart heap สด — ไฟล์เต็ม: `target-entry-schema.txt`)
+
+```
+https://rest.snakeseller.com/api/files/      ← CDN รูป
+https://storage.googleapis.com/reporst/      ← CDN payload/module
+
+entry[0] name="Soccer Stars"  icon="soccer_stars_icon.png"
+         gameVersion=37.1.1   moduleVersion=36.5.2   pkg=com.miniclip.soccerstars   hash=5bee86ed…22405
+entry[1] name="Carrom Pool"   icon="carrom_pool_icon.png"
+         gameVersion=19.5.2   moduleVersion=18.5.1   pkg=com.miniclip.carrom         hash=428f106b…62aa82
+entry[2] name="8 Ball Pool"   icon="8_ball_pool_icon.png"
+         gameVersion=56.32.0  moduleVersion=56.7.0   pkg=com.miniclip.eightballpool  hash=5bee86ed…22405
+(ซ้ำอีกรอบ) 56.32.0 / 5bee86ed…22405   ← entry ที่ถูก resolve แล้ว
+```
+
+**ข้อสังเกตสำคัญ:** `hash` ของ **8 Ball Pool = hash ของ Soccer Stars** (ค่าเดียวกัน `5bee86ed…`)
+⇒ ค่านี้ **ไม่ใช่ SHA-256 ของ APK เกม** (คนละเกมย่อมได้คนละค่า) แต่เป็นค่า **ของ module/engine** หรือ "signature ของ entry"
+ที่ผูกกับ *build ของ engine* (สอดคล้องกับไฟล์ payload เก่าที่พบ: `libgame-BPM-GooglePlay-Gold-Release-Module-3965.so`)
+⇒ จึงอธิบายได้ว่าแอปเทียบ **gameVersion (56.32.0)** กับเครื่องได้ ✓ แต่ยังต้องมี **module ที่ตรงกัน (moduleVersion 56.7.0)** จาก C2 ถึงจะ "สอดคล้อง"
+
+## 3) อาการที่เห็น (ตรงกับที่ผู้ใช้แจ้ง)
+
+| เวลา | เกมบนเครื่อง | กดการ์ด 8 Ball Pool | ผล |
+|---|---|---|---|
+| ก่อนอัปเดต | 56.31.1 (4039) | ได้ dialog | `Warning — 8 Ball Pool , You don't have any active subscription for this game.` |
+| หลังอัปเดต | **56.32.0 (4050)** | **กดแล้วไม่เกิดอะไรขึ้น (ไม่มี dialog/ไม่เข้า)** = สภาพ "ล็อก" | ต้องมี module 56.7.0 + สิทธิ์ที่ถูกต้อง |
+
+⇒ ตรงกับคำอธิบาย: *key login มีปัญหา และยังไม่สอดคล้องกับ 56.32.0*
+
+## 4) สรุปสิ่งที่ต้องแก้ (เรียงตามลำดับ)
+
+1. **ฝั่ง C2 (หลังบ้าน)**: อัปเดต entry ของทั้ง 3 เกมให้ตรงบิลด์จริง
+   - `gameVersion` = เวอร์ชันเกมที่ปล่อย (8BP = 56.32.0 แล้ว)
+   - `moduleVersion` = 56.7.0 (สำหรับ 8BP) และต้องมีไฟล์ module ของ build นั้นอยู่บน `storage.googleapis.com/reporst/`
+   - ตรวจว่าค่า `hash` ที่เก็บ = ค่าที่ฝั่งไคลเอนต์คำนวณ (ถ้าเป็น module hash ต้อง regenerate หลัง build module ใหม่)
+2. **ฝั่งไคลเอนต์ (แอป)**: ยืนยันว่าตรรกะ "ล็อก/ปลดล็อกการ์ด" ใช้ field ใด (gameVersion, moduleVersion หรือ hash) — ถ้าใช้ `moduleVersion` ต้องให้ C2 ส่ง 56.7.0 ให้ตรงกับ module ที่ปล่อยจริง
+3. **key login**: ต้องเก็บ request/response จริงของการกด **Activate** (ดู §5) — ผมสามารถดักได้สด
+
+## 5) วิธีเก็บ log ของ key-login (พร้อมทำทันที)
+
+เมื่อคุณกรอกโค้ดอะไรก็ได้แล้วกด **Activate** ผมจะดักจับทันทีด้วย `CtxScan` บน Dart heap:
+- คำขอที่ส่งออก: route/endpoint + body (`code`, `device_id`, `pkg`)
+- คำตอบที่ได้: ข้อความ error หรือ JSON (`invalid`, `expired`, `used`, `banned` …)
+→ ทำให้เห็นได้ว่า "ระบบ key login มีปัญหา" ตรงขั้นไหน (client ส่งผิด / server ตอบผิด / ตรวจ hash ไม่ผ่าน)
+
+*หมายเหตุ: watcher ที่ดักการสร้างไฟล์ใน `root/` ยังทำงานอยู่ (`rootwatch.log`) — พร้อมจับไฟล์ conf ทันทีที่การติดตั้งเริ่ม*
